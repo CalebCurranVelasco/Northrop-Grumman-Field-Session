@@ -66309,7 +66309,7 @@ GameObject:
   - component: {fileID: 1923635379}
   - component: {fileID: 1923635380}
   m_Layer: 0
-  m_Name: Intersection-5
+  m_Name: light-controller-"intersection"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66349,8 +66349,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7.238838, y: 2.2627869, z: 6.2413025}
-  m_Center: {x: -0.21176338, y: 0.63139355, z: -0.31619644}
+  m_Size: {x: 1.0497437, y: 0.5083728, z: 1.3195305}
+  m_Center: {x: -123.65613, y: 1.6670563, z: -7.713621}
 --- !u!114 &1923635380
 MonoBehaviour:
   m_ObjectHideFlags: 0
