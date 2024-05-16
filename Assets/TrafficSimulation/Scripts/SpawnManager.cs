@@ -19,7 +19,7 @@ public class SpawnManager : MonoBehaviour
             newCarGameObject.transform.Rotate(1, -90, 1);
             
             Rigidbody newCar = newCarGameObject.GetComponent<Rigidbody>();
-            newCar.AddForce(newCarGameObject.transform.forward * 100f);
+            //newCar.AddForce(newCarGameObject.transform.forward * 100f);
         }
     }
 }

@@ -1019,7 +1019,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1038,13 +1038,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trafficSystem: {fileID: 0}
-  waypointThresh: 2
+  waypointThresh: 2.5
   raycastAnchor: {fileID: 950268279}
-  raycastLength: 5
-  raySpacing: 2
-  raysNumber: 6
-  emergencyBrakeThresh: 2
-  slowDownThresh: 4
+  raycastLength: 3
+  raySpacing: 3
+  raysNumber: 8
+  emergencyBrakeThresh: 1.5
+  slowDownThresh: 5
   vehicleStatus: 0
 --- !u!114 &664286232431826756
 MonoBehaviour:
@@ -1059,6 +1059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   widthThresold: {x: 0, y: 0}
+  heightThresold: {x: 0, y: 0}
 --- !u!114 &167513273236157955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,16 +1073,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   downForce: 100
-  maxAngle: 30
+  maxAngle: 60
   steeringLerp: 5
-  steeringSpeedMax: 20
-  maxTorque: 300
-  brakeTorque: 30000
+  steeringSpeedMax: 8
+  maxTorque: 200
+  brakeTorque: 100000
   unitType: 0
-  minSpeed: 5
-  maxSpeed: 50
-  leftWheelShape: {fileID: 0}
-  rightWheelShape: {fileID: 0}
+  minSpeed: 2
+  maxSpeed: 13
+  leftWheelShape: {fileID: 100002, guid: 5c72233a02f639443bf12a6065ddb741, type: 3}
+  rightWheelShape: {fileID: 100004, guid: 5c72233a02f639443bf12a6065ddb741, type: 3}
   animateWheels: 1
   driveType: 0
 --- !u!1 &3312457259515349719
