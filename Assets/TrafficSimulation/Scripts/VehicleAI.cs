@@ -32,7 +32,7 @@ namespace TrafficSimulation {
         public TrafficSystem trafficSystem;
 
         [Tooltip("Determine when the vehicle has reached its target. Can be used to \"anticipate\" earlier the next waypoint (the higher this number his, the earlier it will anticipate the next waypoint)")]
-        public float waypointThresh = 6;
+        public float waypointThresh = 2.5f;
 
 
         [Header("Radar")]
@@ -41,19 +41,19 @@ namespace TrafficSimulation {
         public Transform raycastAnchor;
 
         [Tooltip("Length of the casted rays")]
-        public float raycastLength = 5;
+        public float raycastLength = 3;
 
         [Tooltip("Spacing between each rays")]
-        public int raySpacing = 2;
+        public int raySpacing = 3;
 
         [Tooltip("Number of rays to be casted")]
-        public int raysNumber = 6;
+        public int raysNumber = 8;
 
         [Tooltip("If detected vehicle is below this distance, ego vehicle will stop")]
-        public float emergencyBrakeThresh = 2f;
+        public float emergencyBrakeThresh = 1.5f;
 
         [Tooltip("If detected vehicle is below this distance (and above, above distance), ego vehicle will slow down")]
-        public float slowDownThresh = 4f;
+        public float slowDownThresh = 5f;
 
         [HideInInspector] public Status vehicleStatus = Status.GO;
 
