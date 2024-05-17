@@ -5429,7 +5429,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167239588}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &167239591
 Camera:
   m_ObjectHideFlags: 0
@@ -8167,10 +8167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3e9128ebc1a47778c9ab83fcc23c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cars:
-  - {fileID: 7118174903863567016}
-  - {fileID: 1809614700256750960}
+  carPrefabs:
+  - {fileID: 478776610421784437, guid: fd94330c445fc4fa2aa960a4079051f3, type: 3}
   targetTime: 0
+  trafficSys: {fileID: 0}
 --- !u!4 &250797369
 Transform:
   m_ObjectHideFlags: 0
@@ -16528,7 +16528,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508266102}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &508266105
 Camera:
   m_ObjectHideFlags: 0
@@ -24390,7 +24390,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 722808330}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &722808332
 Camera:
   m_ObjectHideFlags: 0
@@ -32385,7 +32385,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959067881}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &959067883
 Camera:
   m_ObjectHideFlags: 0

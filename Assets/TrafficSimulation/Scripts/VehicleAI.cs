@@ -82,6 +82,10 @@ namespace TrafficSimulation {
             MoveVehicle();
         }
 
+        public void setTrafficSystem(TrafficSystem trafficSys){
+            trafficSystem = trafficSys;
+        }
+
 
         void WaypointChecker(){
             GameObject waypoint = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint].gameObject;
