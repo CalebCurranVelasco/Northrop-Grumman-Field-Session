@@ -26,9 +26,6 @@ public class SpawnManager : MonoBehaviour
             trafficSys = GameObject.Find("Traffic System");
             TrafficSystem trafficSystemComponent = trafficSys.GetComponent<TrafficSystem>();
             newCarGameObject.GetComponent<VehicleAI>().setTrafficSystem(trafficSystemComponent);
-
-
-            Debug.Log("trafficSys: " + trafficSys);
         }
     }
 }
