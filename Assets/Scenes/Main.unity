@@ -1181,7 +1181,7 @@ Transform:
   m_GameObject: {fileID: 28991122}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40.524147, y: 0, z: -0.16036224}
+  m_LocalPosition: {x: -36.72991, y: 0, z: 0.23829651}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8220,17 +8220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefabs:
-  - {fileID: 1172289862568283444, guid: 80185c8bbc6234141b785d819ee183e5, type: 3}
   - {fileID: 478776610421784437, guid: fd94330c445fc4fa2aa960a4079051f3, type: 3}
-  - {fileID: 8984863699935817829, guid: d2da101ea475948eea18010d79f2f594, type: 3}
-  - {fileID: 5915347969475634853, guid: 01f8eaf39a1844276ba270688b266f37, type: 3}
-  - {fileID: 1054772329301834139, guid: 05f5efd51e8734396a4d1db4125d9909, type: 3}
-  - {fileID: 1712254587179197261, guid: ca521235a45fe40deac78176b20ca942, type: 3}
-  - {fileID: 3818628920405571317, guid: 3e8bd82940c5f4bf0a64e81ff55af37c, type: 3}
-  - {fileID: 2982714226379750454, guid: 0e31f1ffba4d74786914d6d1436b9a69, type: 3}
-  - {fileID: 6961247286947636820, guid: 7248c008481204161b9c5e3898941a1b, type: 3}
-  - {fileID: 2456326056426427629, guid: d70c7860dd4d04077886832b10b61423, type: 3}
-  - {fileID: 2237805508728317390, guid: 8338e289557ef485084f4054403ca2d4, type: 3}
   targetTime: 0
   trafficSys: {fileID: 0}
 --- !u!4 &250797369
@@ -8242,7 +8232,7 @@ Transform:
   m_GameObject: {fileID: 250797367}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -81.4, y: 0, z: 91}
+  m_LocalPosition: {x: -106.82, y: 0, z: 91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51145,7 +51135,7 @@ Transform:
   m_GameObject: {fileID: 1568667274}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4376068, y: 0, z: 3.330658}
+  m_LocalPosition: {x: -0.03741455, y: 0, z: 0.15682983}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63799,7 +63789,7 @@ MonoBehaviour:
   - {fileID: 213945743}
   - {fileID: 1796331850}
   - {fileID: 10578848}
-  curSegment: {fileID: 486011}
+  curSegment: {fileID: 1133231820}
 --- !u!4 &1938862189
 Transform:
   m_ObjectHideFlags: 0
@@ -76359,7 +76349,7 @@ Transform:
   m_GameObject: {fileID: 3312457259132380807}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.71650034, z: -0, w: 0.6975868}
-  m_LocalPosition: {x: -109.8, y: 0, z: 90.8}
+  m_LocalPosition: {x: -137.94, y: 0, z: 91.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

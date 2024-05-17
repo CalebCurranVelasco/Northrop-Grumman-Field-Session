@@ -79,10 +79,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   downForce: 100
-  maxAngle: 60
+  maxAngle: -200
   steeringLerp: 5
   steeringSpeedMax: 8
-  maxTorque: 200
+  maxTorque: 2000
   brakeTorque: 100000
   unitType: 0
   minSpeed: 2
