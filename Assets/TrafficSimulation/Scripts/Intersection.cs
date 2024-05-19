@@ -101,7 +101,7 @@ namespace TrafficSimulation{
             VehicleAI vehicleAI = _vehicle.GetComponent<VehicleAI>();
             int vehicleSegment = vehicleAI.GetSegmentVehicleIsIn();
 
-            if(IsRedLightSegment(vehicleSegment)){
+            if(IsRedLightSegment(vehicleSegment) || (vehicleAI.IsTurningLeft() && !vehicleAI.CanTurnLeft())){
                 vehicleAI.vehicleStatus = Status.STOP;
                 vehiclesQueue.Add(_vehicle);
             }
