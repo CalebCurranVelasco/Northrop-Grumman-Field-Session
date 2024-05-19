@@ -7,10 +7,8 @@ using UnityEngine;
 public class CarImageCapture : MonoBehaviour
 {
     public Camera cam; // Reference to the Camera object in the scene
-    public string savePath = "Assets/CarImages2"; // Directory to save the images
+    public string savePath = "Assets/CarImages1"; // Directory to save the images
     public float captureInterval = 1f; // Time interval between captures
-    public int horizontalSteps = 36; // Number of steps horizontally around the car
-    public int verticalSteps = 18; // Number of steps vertically from top to bottom
 
     private Texture2D camTexture;
 
@@ -28,7 +26,72 @@ public class CarImageCapture : MonoBehaviour
 
     IEnumerator CaptureImages()
     {
-        List<Vector3> positions = GenerateSphericalPositions(Vector3.zero, 10f, horizontalSteps, verticalSteps);
+        List<Vector3> positions = new List<Vector3>
+        {
+            // Rear positions
+            new Vector3(0, 5, -10),
+            new Vector3(-2, 5, -9),
+            new Vector3(2, 5, -9),
+
+            // Rear-right corner positions
+            new Vector3(5, 5, -5),
+            new Vector3(4, 5, -6),
+            new Vector3(6, 5, -4),
+
+            // Right positions
+            new Vector3(10, 5, 0),
+            new Vector3(9, 5, -2),
+            new Vector3(9, 5, 2),
+
+            // Front-right corner positions
+            new Vector3(5, 5, 5),
+            new Vector3(6, 5, 4),
+            new Vector3(4, 5, 6),
+
+            // Front positions
+            new Vector3(0, 5, 10),
+            new Vector3(-2, 5, 9),
+            new Vector3(2, 5, 9),
+
+            // Front-left corner positions
+            new Vector3(-5, 5, 5),
+            new Vector3(-4, 5, 6),
+            new Vector3(-6, 5, 4),
+
+            // Left positions
+            new Vector3(-10, 5, 0),
+            new Vector3(-9, 5, -2),
+            new Vector3(-9, 5, 2),
+
+            // Rear-left corner positions
+            new Vector3(-5, 5, -5),
+            new Vector3(-6, 5, -4),
+            new Vector3(-4, 5, -6),
+
+            // Top-down positions
+            new Vector3(0, 10, -10),
+            new Vector3(10, 10, 0),
+            new Vector3(0, 10, 10),
+            new Vector3(-10, 10, 0),
+            new Vector3(0, 15, 0),
+
+            // Additional top-down angles
+            new Vector3(5, 10, -5),
+            new Vector3(5, 10, 5),
+            new Vector3(-5, 10, 5),
+            new Vector3(-5, 10, -5),
+
+            // Ground-level positions
+            new Vector3(0, 1, -10), // Rear ground level
+            new Vector3(10, 1, 0),  // Right ground level
+            new Vector3(0, 1, 10),  // Front ground level
+            new Vector3(-10, 1, 0), // Left ground level
+            new Vector3(5, 1, -10), // Rear-right ground level
+            new Vector3(10, 1, 5),  // Front-right ground level
+            new Vector3(5, 1, 10),  // Front-left ground level
+            new Vector3(-5, 1, 10), // Front-left ground level
+            new Vector3(-10, 1, -5) // Rear-left ground level
+        };
 
         for (int i = 0; i < positions.Count; i++)
         {
@@ -39,28 +102,6 @@ public class CarImageCapture : MonoBehaviour
 
             CaptureAndSaveImage(i);
         }
-    }
-
-    List<Vector3> GenerateSphericalPositions(Vector3 center, float radius, int horizontalSteps, int verticalSteps)
-    {
-        List<Vector3> positions = new List<Vector3>();
-
-        for (int v = 0; v <= verticalSteps; v++)
-        {
-            float verticalAngle = Mathf.PI * v / verticalSteps;
-            for (int h = 0; h < horizontalSteps; h++)
-            {
-                float horizontalAngle = 2 * Mathf.PI * h / horizontalSteps;
-
-                float x = center.x + radius * Mathf.Sin(verticalAngle) * Mathf.Cos(horizontalAngle);
-                float y = center.y + radius * Mathf.Cos(verticalAngle);
-                float z = center.z + radius * Mathf.Sin(verticalAngle) * Mathf.Sin(horizontalAngle);
-
-                positions.Add(new Vector3(x, y, z));
-            }
-        }
-
-        return positions;
     }
 
     void CaptureAndSaveImage(int index)
@@ -80,7 +121,16 @@ public class CarImageCapture : MonoBehaviour
             Destroy(renderTexture);
 
             byte[] byteArray = camTexture.EncodeToJPG();
-            string filePath = Path.Combine(savePath, $"image_{index}.jpg");
+
+            // Find a unique filename
+            int imageIndex = 0;
+            string filePath;
+            do
+            {
+                filePath = Path.Combine(savePath, $"image_{index}_{imageIndex}.jpg");
+                imageIndex++;
+            } while (File.Exists(filePath));
+
             File.WriteAllBytes(filePath, byteArray);
 
             Debug.Log($"Saved image to: {filePath}");
