@@ -48,6 +48,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2880759500889471306, guid: 354ee0ffa37a64bf0b08a6f393c3ef1a, type: 3}
+      propertyPath: isRobberCar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2880759500889471306, guid: 354ee0ffa37a64bf0b08a6f393c3ef1a, type: 3}
+      propertyPath: escapeLocation
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3775357303840701956, guid: 354ee0ffa37a64bf0b08a6f393c3ef1a, type: 3}
       propertyPath: m_Name
       value: car Variant 4 Variant

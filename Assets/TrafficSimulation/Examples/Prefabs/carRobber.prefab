@@ -86,8 +86,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3333902919807023894, guid: 6e326a134c20c48bca9c3ba17a58a62a, type: 3}
       propertyPath: m_Name
-      value: car Variant 4
+      value: carRobber
       objectReference: {fileID: 0}
+    - target: {fileID: 3333902919807023894, guid: 6e326a134c20c48bca9c3ba17a58a62a, type: 3}
+      propertyPath: m_TagString
+      value: AutonomousVehicle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456918750645255256, guid: 6e326a134c20c48bca9c3ba17a58a62a, type: 3}
+      propertyPath: isRobberCar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456918750645255256, guid: 6e326a134c20c48bca9c3ba17a58a62a, type: 3}
+      propertyPath: escapeLocation
+      value: 
+      objectReference: {fileID: 7608857621731837634, guid: b8c74de4bdbad4b7b8ef8e073cb8fe78, type: 3}
     - target: {fileID: 6297379015897413091, guid: 6e326a134c20c48bca9c3ba17a58a62a, type: 3}
       propertyPath: m_Mesh
       value: 

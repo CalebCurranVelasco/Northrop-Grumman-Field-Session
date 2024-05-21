@@ -1,8 +1,10 @@
 // Traffic Simulation
 // https://github.com/mchrbn/unity-traffic-simulation
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 namespace TrafficSimulation {
@@ -54,6 +56,10 @@ namespace TrafficSimulation {
 
         [Tooltip("If detected vehicle is below this distance (and above, above distance), ego vehicle will slow down")]
         public float slowDownThresh = 5f;
+        [Tooltip("Toggle to select as robber")]
+        public bool isRobberCar = false;
+        [Tooltip("Add target escape location for robber vehicles")]
+        public GameObject escapeLocation = null;
 
         [HideInInspector] public Status vehicleStatus = Status.GO;
 
@@ -305,10 +311,38 @@ namespace TrafficSimulation {
         }
 
         int GetNextSegmentId(){
-            if(trafficSystem.segments[currentTarget.segment].nextSegments.Count == 0)
+            List<TrafficSimulation.Segment> nextSegs = trafficSystem.segments[currentTarget.segment].nextSegments;
+            
+            if(nextSegs.Count == 0)
                 return 0;
-            int c = Random.Range(0, trafficSystem.segments[currentTarget.segment].nextSegments.Count);
-            return trafficSystem.segments[currentTarget.segment].nextSegments[c].id;
+            else if(isRobberCar){
+                Debug.Log("Calculating robber's next segement****************");
+                // Target escape location's position on screen
+                Vector3 escapeLocPos = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
+                //Debug.Log("escapeLocation (x,z): " + escapeLocPos.x + "," + escapeLocPos.z);
+
+                TrafficSimulation.Segment closestSeg = null;
+                float closestSegDist = float.MaxValue;
+
+                // Calculate closest segement to target via manhattan distance
+                foreach(var nextSeg in nextSegs){
+                    // Location of nextSeg's last waypoint's position on screen
+                    Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
+                    float manhattanDist = Math.Abs(screenPos.x - escapeLocPos.x) + Math.Abs(screenPos.z - escapeLocPos.z);
+                    Debug.Log(nextSeg + " manhattanDist: " + manhattanDist);
+                   
+                   if(manhattanDist < closestSegDist){
+                        closestSegDist = manhattanDist;
+                        closestSeg = nextSeg;
+                    }
+                }
+                
+                return closestSeg.id;
+            }
+            else{
+                int c = UnityEngine.Random.Range(0, nextSegs.Count);
+                return nextSegs[c].id;
+            }
         }
 
         void SetWaypointVehicleIsOn(){
