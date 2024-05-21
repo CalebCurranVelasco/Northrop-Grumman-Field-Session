@@ -101,13 +101,21 @@ namespace TrafficSimulation{
             VehicleAI vehicleAI = _vehicle.GetComponent<VehicleAI>();
             int vehicleSegment = vehicleAI.GetSegmentVehicleIsIn();
 
-            if(IsRedLightSegment(vehicleSegment) || (vehicleAI.IsTurningLeft() && !vehicleAI.CanTurnLeft())){
+            if(IsRedLightSegment(vehicleSegment)){
                 vehicleAI.vehicleStatus = Status.STOP;
                 vehiclesQueue.Add(_vehicle);
             }
             else{
                 vehicleAI.vehicleStatus = Status.GO;
             }
+
+            // if(IsRedLightSegment(vehicleSegment) || (vehicleAI.IsTurningLeft() && !vehicleAI.CanTurnLeft())){
+            //     vehicleAI.vehicleStatus = Status.STOP;
+            //     vehiclesQueue.Add(_vehicle);
+            // }
+            // else{
+            //     vehicleAI.vehicleStatus = Status.GO;
+            // }
         }
 
         void ExitLight(GameObject _vehicle){

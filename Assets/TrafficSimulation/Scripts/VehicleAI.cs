@@ -86,37 +86,6 @@ namespace TrafficSimulation {
             trafficSystem = trafficSys;
         }
 
-        public bool IsTurningLeft(){
-            // Get the current waypoint and the next waypoint
-            Waypoint currentWaypoint = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint];
-            Waypoint nextWaypoint = trafficSystem.segments[futureTarget.segment].waypoints[futureTarget.waypoint];
-
-            // Calculate the direction from the current waypoint to the next waypoint
-            Vector3 direction = nextWaypoint.transform.position - currentWaypoint.transform.position;
-
-            // Calculate the angle between the vehicle's forward direction and the direction to the next waypoint
-            float angle = Vector3.SignedAngle(transform.forward, direction, Vector3.up);
-
-            // Check if the angle indicates a left turn (between 45 and 135 degrees)
-            return angle > 35f && angle < 135f;
-        }
-
-        public bool CanTurnLeft(){
-            Debug.Log("checking if vehicle can turn left");
-            // Check if there are obstacles in the left turn path
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, raycastLength)) {
-                Debug.Log("entered first if");
-                return false;
-                // if (hit.collider.tag == "AutonomousVehicle") {
-                //     // There is an obstacle in the left turn path
-                //     Debug.Log("object detected in vechicle's way");
-                //     return false;
-                // }
-            }
-            return true;
-        }
-
         void WaypointChecker(){
             GameObject waypoint = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint].gameObject;
 
@@ -220,7 +189,7 @@ namespace TrafficSimulation {
                             else steering = -.7f;
                         }
 
-                        //If the two vehicles are getting close, slow down their speed
+                        // //If the two vehicles are getting close, slow down their speed
                         else if(hitDist < slowDownThresh){
                             acc = .5f;
                             brake = 0f;

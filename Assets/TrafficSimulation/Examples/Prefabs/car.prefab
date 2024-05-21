@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7040791309909652051}
   - component: {fileID: 6904460726704094834}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Front Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 4456918750645255256}
   - component: {fileID: 396387040624281139}
   - component: {fileID: 2410470053941511156}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: car
   m_TagString: AutonomousVehicle
   m_Icon: {fileID: 0}
@@ -202,8 +202,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.88, y: 0.78, z: 2.6179137}
-  m_Center: {x: -1.6732664e-11, y: 0.51000375, z: -0.09457821}
+  m_Size: {x: 0.88, y: 0.78, z: 2.1996198}
+  m_Center: {x: 1.4931262e-13, y: 0.51000965, z: -0.00089126825}
 --- !u!114 &2410470053941511156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 841544046815615096}
   - component: {fileID: 6297379015897413091}
   - component: {fileID: 9171235913014609968}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Car Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7674133779917542096}
   - component: {fileID: 8318253967980277271}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Back Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,7 +379,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1217757358232357364}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Raycast Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2000617947665944364}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2214627989019192167}
   - component: {fileID: 1255713083759932489}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Front Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -517,7 +517,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6452278557679006235}
   - component: {fileID: 5301325705348752607}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Back Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
