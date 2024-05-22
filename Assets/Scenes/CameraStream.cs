@@ -1,16 +1,13 @@
 using System;
 using System.Collections;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraStream : MonoBehaviour
 {
     public Camera cam; // Reference to the Camera object in the scene
-    public RawImage camImage; // UI element to display the image
     public string camIP = "127.0.0.1";
     public int camPort = 8081;
     private Texture2D camTexture; // Texture to load the image
@@ -47,6 +44,13 @@ public class CameraStream : MonoBehaviour
                 Destroy(renderTexture);
 
                 byte[] byteArray = camTexture.EncodeToJPG();
+
+                // Check if the byte array size exceeds UDP max packet size
+                if (byteArray.Length > 65507)
+                {
+                    Debug.LogError("Encoded image size exceeds UDP packet size limit.");
+                    continue;
+                }
 
                 // Send the image data
                 udpClient.Send(byteArray, byteArray.Length, endPoint);

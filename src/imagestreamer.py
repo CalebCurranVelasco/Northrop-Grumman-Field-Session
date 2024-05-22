@@ -18,7 +18,11 @@ def imageStreamer():
             img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
             # Display the image
-            cv2.imshow('Received Image', img_np)
+            if img_np is not None:
+                cv2.imshow('Received Image', img_np)
+            else:
+                print("Failed to decode image")
+
             if cv2.waitKey(1) == 27:  # Press 'Esc' to exit
                 break
         except Exception as e:
