@@ -182,6 +182,8 @@ MonoBehaviour:
   raysNumber: 8
   emergencyBrakeThresh: 1.5
   slowDownThresh: 5
+  isRobberCar: 0
+  escapeLocation: {fileID: 0}
   vehicleStatus: 0
 --- !u!65 &396387040624281139
 BoxCollider:
