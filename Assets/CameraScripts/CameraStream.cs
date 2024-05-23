@@ -27,7 +27,7 @@ public class CameraStream : MonoBehaviour
     {
         while (connectCam)
         {
-            yield return new WaitForSeconds(1); // wait for one second between frames
+            yield return new WaitForSeconds(0.1f); // wait for one second between frames
 
             try
             {
@@ -45,15 +45,23 @@ public class CameraStream : MonoBehaviour
 
                 byte[] byteArray = camTexture.EncodeToJPG();
 
-                // Check if the byte array size exceeds UDP max packet size
-                if (byteArray.Length > 65507)
-                {
-                    Debug.LogError("Encoded image size exceeds UDP packet size limit.");
-                    continue;
-                }
+                // Split the byte array into smaller chunks
+                int chunkSize = 60000; // 60 KB chunks
+                int totalChunks = Mathf.CeilToInt(byteArray.Length / (float)chunkSize);
 
-                // Send the image data
-                udpClient.Send(byteArray, byteArray.Length, endPoint);
+                // Send the total number of chunks first
+                byte[] totalChunksBytes = BitConverter.GetBytes(totalChunks);
+                udpClient.Send(totalChunksBytes, totalChunksBytes.Length, endPoint);
+
+                for (int i = 0; i < totalChunks; i++)
+                {
+                    int currentChunkSize = Mathf.Min(chunkSize, byteArray.Length - i * chunkSize);
+                    byte[] chunk = new byte[currentChunkSize + 4];
+                    Buffer.BlockCopy(BitConverter.GetBytes(i), 0, chunk, 0, 4); // Add chunk index at the start
+                    Buffer.BlockCopy(byteArray, i * chunkSize, chunk, 4, currentChunkSize);
+
+                    udpClient.Send(chunk, chunk.Length, endPoint);
+                }
             }
             catch (Exception e)
             {
@@ -61,6 +69,8 @@ public class CameraStream : MonoBehaviour
             }
         }
     }
+
+
 
     void OnApplicationQuit()
     {
