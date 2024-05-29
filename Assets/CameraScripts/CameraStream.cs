@@ -27,7 +27,7 @@ public class CameraStream : MonoBehaviour
     {
         while (connectCam)
         {
-            yield return new WaitForSeconds(0.1f); // wait for one second between frames
+            yield return new WaitForSeconds(0.1f); // wait for 0.1 seconds between frames
 
             try
             {
@@ -69,8 +69,6 @@ public class CameraStream : MonoBehaviour
             }
         }
     }
-
-
 
     void OnApplicationQuit()
     {
