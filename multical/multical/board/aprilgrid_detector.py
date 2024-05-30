@@ -1,6 +1,5 @@
-from apriltag import make_default_detector
+from apriltags_eth import make_default_detector
 from collections import namedtuple
-
 
 DetectionResult = namedtuple(
     'DetectionResult', ['success', 'image_points', 'target_points', 'ids'])

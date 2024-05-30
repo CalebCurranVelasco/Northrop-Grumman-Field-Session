@@ -142,7 +142,7 @@ def align_transforms_robust(m1, m2, valid=None, threshold=1.5):
     threshold (float): factor of upper quartile to be determined as an outlier.
   """
 
-  mask = choose(valid, np.ones(m1.shape[0], dtype=bool))
+  mask = choose(valid, np.ones(m1.shape[0], dtype=np.bool))
 
   m = align_transforms_mean(m1[mask], m2[mask])
   errs = error_transform(m, m1, m2)
