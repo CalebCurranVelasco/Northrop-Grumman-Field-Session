@@ -73,5 +73,3 @@ def load_config(yaml_file):
       assert False, f"unknown board type: {config._type_}, options are (charuco | aprilgrid | checkerboard)"
 
   return {k:instantiate_board(board) for k, board in boards.items()}
-
-

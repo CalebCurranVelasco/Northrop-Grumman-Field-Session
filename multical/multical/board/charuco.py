@@ -38,7 +38,7 @@ class CharucoBoard(Parameters, Board):
     def board(self):
         aruco_dict = create_dict(self.aruco_dict, self.aruco_offset)
         width, height = self.size
-        return cv2.aruco.CharucoBoard_create(width, height, self.square_length, self.marker_length, aruco_dict)
+        return cv2.aruco.CharucoBoard((width, height), self.square_length, self.marker_length, aruco_dict)
     
 
     @property
@@ -52,7 +52,7 @@ class CharucoBoard(Parameters, Board):
             aruco_dict=self.aruco_dict,
             aruco_offset=self.aruco_offset,
             size=self.size,
-            num_ids=len(self.board.ids),
+            num_ids=self.size[0] * self.size[1],
             marker_length=self.marker_length,
             square_length=self.square_length,
             aruco_params=self.aruco_params
@@ -63,7 +63,7 @@ class CharucoBoard(Parameters, Board):
 
     @property
     def points(self):
-        return self.board.chessboardCorners
+        return self.board.getChessboardCorners
   
     @property
     def num_points(self):
