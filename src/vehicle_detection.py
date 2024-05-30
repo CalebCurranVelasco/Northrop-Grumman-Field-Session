@@ -2,13 +2,9 @@ import cv2
 import numpy as np
 import socket
 from ultralytics import YOLO
-from sort import Sort
 
 # Load the YOLO model
 model = YOLO('models/custom_yolo_model_2.0.pt')
-
-# Initialize the SORT tracker
-tracker = Sort()
 
 def imageStreamer():
     udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -19,6 +15,7 @@ def imageStreamer():
     expected_chunks = {}
     while True:
         try:
+            # Receive the image data
             data, address = udpSocket.recvfrom(65507)  # 65507 is the max UDP packet size
 
             if address not in buffers:
@@ -48,27 +45,12 @@ def imageStreamer():
                 if img_np is not None:
                     # Run YOLO model inference
                     results = model(img_np, conf=0.25)
-                    
-                    # Extract bounding boxes and confidences
-                    detections = []
-                    for result in results:
-                        for box in result.boxes:
-                            x1, y1, x2, y2 = box.xyxy[0]
-                            conf = box.conf[0]
-                            detections.append([x1, y1, x2, y2, conf])
 
-                    # Update tracker with detections
-                    detections = np.array(detections)
-                    tracked_objects = tracker.update(detections)
-                    
-                    # Display the tracked objects
-                    for obj in tracked_objects:
-                        x1, y1, x2, y2, obj_id = obj
-                        cv2.rectangle(img_np, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-                        cv2.putText(img_np, f'ID: {int(obj_id)}', (int(x1), int(y1)-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    # Display the image with predictions
+                    annotated_frame = results[0].plot()  # Get the annotated frame
+                    cv2.imshow('YOLO Predictions', annotated_frame)
 
-                    cv2.imshow('YOLO Predictions with Tracking', img_np)
-
+                    # Check for 'Esc' key press to exit
                     if cv2.waitKey(1) == 27:  # Press 'Esc' to exit
                         break
                 else:
