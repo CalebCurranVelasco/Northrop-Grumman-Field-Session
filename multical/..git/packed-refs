@@ -1,0 +1,13 @@
+# pack-refs with: peeled fully-peeled sorted 
+06667fe6d06127d75f958b900856429f64938c77 refs/remotes/origin/calib_single
+f8ba49391fd22e91db498bc1abc14dcf6acba206 refs/remotes/origin/dataclass
+d1485fed29d4cfc09d5660abfb45ccaab6b277bf refs/remotes/origin/external_intrinsic
+4c8ff815a0af8cf33c0c77af3e951b0fbcb93661 refs/remotes/origin/fix_vis
+a2968b4d2f0dcb6dc588f8cd93de1656d3dbca1f refs/remotes/origin/image_quality
+cc3bf8e3634839fb7f83380ab8e1ede72063d312 refs/remotes/origin/master
+dbcc7450963bfb4e8bc129997646db612f7787fd refs/remotes/origin/merging
+212328cbc1612ba1c55e7338a97586fc60eb1c52 refs/remotes/origin/motion_models
+7ac3ebe62bee4d07c586233bb2d4082bc039bc8f refs/remotes/origin/multi-board
+cf7d8036473847b0baf7d0b32ca3671862dd513a refs/remotes/origin/regularization
+d894e76ad71f7032697cc7536699b10e98f43dce refs/remotes/origin/rolling-shutter
+9b1930a66f5f9aed5e99292b3e4b209648cbfffc refs/remotes/origin/sample_images
