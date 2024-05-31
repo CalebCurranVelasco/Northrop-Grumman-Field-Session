@@ -9,7 +9,6 @@ from cached_property import cached_property
 import cv2
 import numpy as np
 
-
 from structs.struct import struct, choose, subset
 from multical.optimization.parameters import Parameters
 
