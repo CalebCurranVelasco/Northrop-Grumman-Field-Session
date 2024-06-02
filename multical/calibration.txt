@@ -160,3 +160,185 @@ INFO - Function evaluations 11, initial cost 1.3072e+07, final cost 1.2901e+07, 
 INFO - Adjust_outliers end: reprojection RMS=133.672 (391417.129), n=1444 (1468), quantiles=[       0.4787       10.9792       41.3697      126.9042 14252778.5015]
 INFO - Exporting calibration to ./calibration.json
 INFO - Dumping state and history to ./calibration.pkl
+INFO - Using boards:
+INFO - charucoBR CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
+INFO - charucoTR CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=50, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
+INFO - Found camera directories ['cam1', 'cam2', 'cam3'] with 1 matching images
+INFO - Loading images..
+INFO - Loaded 3 images
+INFO - {'cam1': (2880, 1610), 'cam2': (2188, 1590), 'cam3': (2880, 1606)}
+INFO - Loaded detections from ./calibration.detections.pkl
+INFO - Detected point counts:
+INFO - Total: 1468, cameras: {'cam1': 437, 'cam2': 523, 'cam3': 508}, Boards: {'charucoBR': 756, 'charucoTR': 712}
+INFO - Camera-board matrix
+INFO - [[178 259]
+        [281 242]
+        [297 211]]
+INFO - Calibrating single cameras..
+INFO - Calibrated cam1, with RMS=72.81
+INFO - Camera {'dist': array([[-0.1296,  0.0066,  0.0121, -0.0396, -0.0373]]),
+        'image_size': (2880, 1610),
+        'intrinsic': array([[1472.048 ,    0.    , 1581.5312],
+              [   0.    , 1654.8006,  722.8413],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=223.37
+INFO - Camera {'dist': array([[-1.2232,  1.4258, -0.7134, -0.5596, 23.0067]]),
+        'image_size': (2188, 1590),
+        'intrinsic': array([[3198.1215,    0.    ,  913.8878],
+              [   0.    , 5138.624 ,  655.955 ],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=63.04
+INFO - Camera {'dist': array([[-0.05  , -0.0372, -0.0035, -0.0024,  0.0335]]),
+        'image_size': (2880, 1606),
+        'intrinsic': array([[1511.6399,    0.    , 1343.0101],
+              [   0.    , 1519.7441,  854.9469],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Pose counts:
+INFO - Total: 6, cameras: {'cam1': 2, 'cam2': 2, 'cam3': 2}, Boards: {'charucoBR': 3, 'charucoTR': 3}
+INFO - Camera-board matrix
+INFO - [[1 1]
+        [1 1]
+        [1 1]]
+INFO - Overlaps by camera:
+INFO - [[  0. 420. 389.]
+        [420.   0. 492.]
+        [389. 492.   0.]]
+INFO - Selected master 1 and pairs [(1, 2), (1, 0)]
+INFO - Estimate transform axis=0, pair (1, 2), inliers 2/2
+INFO - RMS (frobius): 0.8080 (0.8080) (deg): 33.2686 (33.2686) (trans): 0.6935 (0.6935)
+INFO - [[ 0.4607 -0.4862 -0.7426  0.5182]
+        [ 0.0039  0.8378 -0.546  -0.0803]
+        [ 0.8876  0.2486  0.3878  1.1247]
+        [ 0.      0.      0.      1.    ]]
+INFO - Estimate transform axis=0, pair (1, 0), inliers 2/2
+INFO - RMS (frobius): 1.4000 (1.4000) (deg): 62.3011 (62.3011) (trans): 1.7616 (1.7616)
+INFO - [[ 0.5008  0.0409 -0.8646  0.4012]
+        [ 0.8172  0.3069  0.4879 -0.8429]
+        [ 0.2853 -0.9509  0.1203  1.6565]
+        [ 0.      0.      0.      1.    ]]
+INFO - Overlaps by board:
+INFO - [[  0. 631.]
+        [631.   0.]]
+INFO - Selected master 0 and pairs [(0, 1)]
+INFO - Estimate transform axis=2, pair (0, 1), inliers 3/3
+INFO - RMS (frobius): 1.2241 (1.2241) (deg): 36.3859 (36.3859) (trans): 0.1309 (0.1309)
+INFO - [[-0.4721  0.3989 -0.7861  0.2341]
+        [ 0.2496  0.9158  0.3148 -0.1591]
+        [ 0.8455 -0.0476 -0.5319 -0.11  ]
+        [ 0.      0.      0.      1.    ]]
+INFO - Initialisation reprojection RMS=230.752, n=1468, quantiles=[   0.0373   20.9588  105.313   173.1938 1161.0771]
+INFO - Beginning adjustments (3) enabled: {cameras=True, boards=False, camera_poses=True, board_poses=True, motion=True}, options: {'loss': 'linear', 'tolerance': 0.0001}
+INFO - Adjust_outliers 0: reprojection RMS=230.752, n=1468, quantiles=[   0.0373   20.9588  105.313   173.1938 1161.0771]
+INFO - Rejecting 29 outliers with error > 865.97 pixels, keeping 1439 / 1468 inliers, (98.02%)
+INFO - Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality
+INFO - 0              1         2.4355e+07                                    9.14e+07
+INFO - 1              3         1.7328e+07      7.03e+06       7.23e+02       3.30e+07
+INFO - 2              4         1.5778e+07      1.55e+06       8.63e+02       7.91e+07
+INFO - 3              5         1.3703e+07      2.08e+06       1.14e+03       1.51e+07
+INFO - 4              7         1.3068e+07      6.35e+05       5.00e+02       7.92e+06
+INFO - 5              8         1.2880e+07      1.88e+05       1.35e+03       9.34e+06
+INFO - 6              9         1.2727e+07      1.53e+05       1.75e+03       1.15e+07
+INFO - 7             11         1.2681e+07      4.62e+04       8.92e+02       4.54e+06
+INFO - 8             12         1.2655e+07      2.54e+04       1.75e+03       1.06e+07
+INFO - 9             13         1.2607e+07      4.85e+04       1.72e+03       1.06e+07
+INFO - 10             14         1.2571e+07      3.64e+04       1.72e+03       1.17e+07
+INFO - 11             15         1.2536e+07      3.48e+04       1.73e+03       1.31e+07
+INFO - 12             16         1.2504e+07      3.19e+04       1.73e+03       1.41e+07
+INFO - 13             17         1.2473e+07      3.09e+04       1.75e+03       1.46e+07
+INFO - 14             18         1.2445e+07      2.82e+04       1.76e+03       1.48e+07
+INFO - 15             19         1.2419e+07      2.57e+04       1.78e+03       1.49e+07
+INFO - 16             20         1.2396e+07      2.29e+04       1.79e+03       1.50e+07
+INFO - 17             21         1.2375e+07      2.11e+04       1.81e+03       1.52e+07
+INFO - 18             22         1.2356e+07      1.92e+04       1.84e+03       1.55e+07
+INFO - 19             23         1.2338e+07      1.75e+04       1.86e+03       1.59e+07
+INFO - 20             24         1.2322e+07      1.60e+04       1.89e+03       1.63e+07
+INFO - 21             25         1.2308e+07      1.45e+04       1.93e+03       1.65e+07
+INFO - 22             26         1.2295e+07      1.31e+04       1.96e+03       1.66e+07
+INFO - 23             27         1.2283e+07      1.21e+04       2.00e+03       1.64e+07
+INFO - 24             28         1.2272e+07      1.09e+04       2.05e+03       1.66e+07
+INFO - 25             29         1.2262e+07      9.45e+03       2.09e+03       1.74e+07
+INFO - 26             30         1.2254e+07      8.79e+03       2.13e+03       1.70e+07
+INFO - 27             31         1.2246e+07      7.85e+03       2.18e+03       1.64e+07
+INFO - 28             32         1.2239e+07      7.10e+03       2.22e+03       1.75e+07
+INFO - 29             33         1.2232e+07      6.39e+03       2.25e+03       1.95e+07
+INFO - 30             34         1.2226e+07      5.90e+03       2.27e+03       2.11e+07
+INFO - 31             35         1.2221e+07      5.63e+03       2.28e+03       2.18e+07
+INFO - 32             36         1.2215e+07      5.24e+03       2.28e+03       2.21e+07
+INFO - 33             37         1.2211e+07      4.86e+03       2.28e+03       2.31e+07
+INFO - 34             38         1.2206e+07      4.74e+03       2.28e+03       2.40e+07
+INFO - 35             39         1.2201e+07      4.66e+03       2.28e+03       2.33e+07
+INFO - 36             41         1.2198e+07      3.43e+03       1.13e+03       1.08e+07
+INFO - 37             42         1.2194e+07      3.31e+03       2.26e+03       1.96e+07
+INFO - 38             43         1.2191e+07      3.85e+03       2.26e+03       2.38e+07
+INFO - 39             44         1.2187e+07      4.09e+03       2.25e+03       2.31e+07
+INFO - 40             46         1.2184e+07      2.93e+03       1.12e+03       1.10e+07
+INFO - 41             47         1.2181e+07      3.08e+03       2.23e+03       1.76e+07
+INFO - 42             49         1.2178e+07      2.53e+03       1.11e+03       1.01e+07
+INFO - 43             50         1.2175e+07      2.94e+03       2.22e+03       1.70e+07
+INFO - 44             52         1.2173e+07      2.30e+03       1.11e+03       9.59e+06
+INFO - 45             53         1.2170e+07      2.82e+03       2.21e+03       1.55e+07
+INFO - 46             55         1.2168e+07      2.11e+03       1.10e+03       8.92e+06
+INFO - 47             56         1.2165e+07      2.72e+03       2.19e+03       1.40e+07
+INFO - 48             58         1.2163e+07      1.94e+03       1.09e+03       8.12e+06
+INFO - 49             59         1.2161e+07      2.61e+03       2.18e+03       1.40e+07
+INFO - 50             61         1.2159e+07      1.79e+03       1.09e+03       7.28e+06
+INFO - 51             62         1.2156e+07      2.50e+03       2.17e+03       1.41e+07
+INFO - 52             64         1.2155e+07      1.66e+03       1.08e+03       6.41e+06
+INFO - 53             65         1.2152e+07      2.40e+03       2.15e+03       1.41e+07
+INFO - 54             66         1.2152e+07      4.26e+02       4.29e+03       6.40e+07
+INFO - 55             67         1.2146e+07      5.33e+03       3.34e+02       4.73e+06
+INFO - 56             68         1.2145e+07      1.21e+03       1.06e+03       3.15e+06
+INFO - `ftol` termination condition is satisfied.
+INFO - Function evaluations 68, initial cost 2.4355e+07, final cost 1.2145e+07, first-order optimality 3.15e+06.
+INFO - Adjust_outliers 1: reprojection RMS=129.923 (143.045), n=1439 (1468), quantiles=[  0.5889  10.455   39.5847 120.9063 913.7456]
+INFO - Rejecting 9 outliers with error > 604.53 pixels, keeping 1459 / 1468 inliers, (99.39%)
+INFO - Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality
+INFO - 0              1         1.2721e+07                                    1.57e+07
+INFO - 1              2         1.2585e+07      1.36e+05       2.10e+03       1.81e+07
+INFO - 2              4         1.2574e+07      1.09e+04       7.89e+02       1.91e+07
+INFO - 3              5         1.2570e+07      4.53e+03       1.62e+03       2.97e+07
+INFO - 4              6         1.2564e+07      5.54e+03       1.62e+03       3.41e+07
+INFO - 5              7         1.2559e+07      5.13e+03       1.66e+03       3.49e+07
+INFO - 6              8         1.2555e+07      4.55e+03       1.75e+03       3.62e+07
+INFO - 7              9         1.2550e+07      4.21e+03       1.89e+03       3.75e+07
+INFO - 8             10         1.2547e+07      3.99e+03       2.05e+03       3.71e+07
+INFO - 9             11         1.2543e+07      3.88e+03       2.19e+03       3.43e+07
+INFO - 10             12         1.2539e+07      3.79e+03       2.31e+03       2.96e+07
+INFO - 11             14         1.2536e+07      2.58e+03       1.19e+03       1.43e+07
+INFO - 12             15         1.2533e+07      2.75e+03       2.40e+03       1.77e+07
+INFO - 13             17         1.2531e+07      2.14e+03       1.21e+03       1.18e+07
+INFO - 14             18         1.2528e+07      2.87e+03       2.41e+03       1.38e+07
+INFO - 15             19         1.2528e+07      5.99e+01       4.81e+03       5.66e+07
+INFO - 16             20         1.2521e+07      6.94e+03       3.72e+02       1.62e+06
+INFO - 17             21         1.2520e+07      1.41e+03       1.18e+03       1.90e+06
+INFO - 18             22         1.2518e+07      2.51e+03       2.35e+03       1.10e+07
+INFO - 19             23         1.2517e+07      1.02e+03       4.66e+03       4.39e+07
+INFO - 20             24         1.2511e+07      5.09e+03       5.58e+02       3.45e+06
+INFO - 21             25         1.2510e+07      1.29e+03       1.14e+03       2.16e+06
+INFO - 22             26         1.2508e+07      2.17e+03       2.27e+03       1.01e+07
+INFO - 23             28         1.2507e+07      1.38e+03       1.12e+03       4.01e+06
+INFO - 24             29         1.2505e+07      1.89e+03       2.24e+03       1.31e+07
+INFO - 25             31         1.2503e+07      1.52e+03       1.10e+03       5.66e+06
+INFO - 26             32         1.2502e+07      1.62e+03       2.20e+03       1.14e+07
+INFO - 27             33         1.2500e+07      1.96e+03       2.18e+03       6.75e+06
+INFO - 28             34         1.2497e+07      2.56e+03       2.16e+03       1.14e+07
+INFO - 29             36         1.2496e+07      1.38e+03       1.07e+03       5.78e+06
+INFO - 30             37         1.2495e+07      1.18e+03       2.13e+03       1.47e+07
+INFO - `ftol` termination condition is satisfied.
+INFO - Function evaluations 37, initial cost 1.2721e+07, final cost 1.2495e+07, first-order optimality 1.47e+07.
+INFO - Adjust_outliers 2: reprojection RMS=130.872 (142.195), n=1459 (1468), quantiles=[  0.2615  10.924   39.0674 118.457  948.0792]
+INFO - Rejecting 9 outliers with error > 592.29 pixels, keeping 1459 / 1468 inliers, (99.39%)
+INFO - Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality
+INFO - 0              1         1.2495e+07                                    1.47e+07
+INFO - 1              4         1.2493e+07      1.37e+03       1.15e+03       6.38e+06
+INFO - 2              5         1.2491e+07      1.86e+03       1.15e+03       3.35e+06
+INFO - 3              6         1.2490e+07      1.69e+03       1.13e+03       4.93e+06
+INFO - 4              8         1.2489e+07      8.07e+02       5.72e+02       2.75e+06
+INFO - `ftol` termination condition is satisfied.
+INFO - Function evaluations 8, initial cost 1.2495e+07, final cost 1.2489e+07, first-order optimality 2.75e+06.
+INFO - Adjust_outliers end: reprojection RMS=130.842 (142.159), n=1459 (1468), quantiles=[  0.3935  10.6019  39.0743 118.5069 948.545 ]
+INFO - Exporting calibration to ./calibration.json
+INFO - Dumping state and history to ./calibration.pkl
