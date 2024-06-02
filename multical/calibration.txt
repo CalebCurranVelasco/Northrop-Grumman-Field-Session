@@ -1,83 +1,162 @@
 INFO - Using boards:
-INFO - charucoTL CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=450, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
-INFO - Found camera directories ['cam1', 'cam2'] with 1 matching images
+INFO - charucoBR CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
+INFO - charucoTR CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=50, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
+INFO - Found camera directories ['cam1', 'cam2', 'cam3'] with 1 matching images
 INFO - Loading images..
-INFO - Loaded 2 images
-INFO - {'cam1': (1066, 1046), 'cam2': (1344, 908)}
+INFO - Loaded 3 images
+INFO - {'cam1': (1086, 784), 'cam2': (590, 1502), 'cam3': (850, 642)}
 INFO - Detecting boards..
 INFO - Writing detection cache to ./calibration.detections.pkl
 INFO - Detected point counts:
-INFO - Total: 24, cameras: {'cam1': 12, 'cam2': 12}, Boards: {'charucoTL': 24}
-INFO - Using boards:
-INFO - charucoBR CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=50, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
-INFO - Found camera directories ['cam1', 'cam2'] with 1 matching images
-INFO - Loading images..
-INFO - Loaded 2 images
-INFO - {'cam1': (1252, 960), 'cam2': (984, 1028)}
-INFO - Config changed, not using loaded detections in ./calibration.detections.pkl
-INFO - Detecting boards..
-INFO - Writing detection cache to ./calibration.detections.pkl
-INFO - Detected point counts:
-INFO - Total: 534, cameras: {'cam1': 267, 'cam2': 267}, Boards: {'charucoBR': 534}
+INFO - Total: 1468, cameras: {'cam1': 437, 'cam2': 523, 'cam3': 508}, Boards: {'charucoBR': 756, 'charucoTR': 712}
+INFO - Camera-board matrix
+INFO - [[178 259]
+        [281 242]
+        [297 211]]
 INFO - Calibrating single cameras..
-INFO - Calibrated cam1, with RMS=0.14
-INFO - Camera {'dist': array([[-0.4335, -0.0047,  0.0071, -0.0052, -0.    ]]),
-        'image_size': (1252, 960),
-        'intrinsic': array([[31050.5576,     0.    ,   625.4945],
-              [    0.    , 31942.5534,   479.5026],
-              [    0.    ,     0.    ,     1.    ]])}
+INFO - Calibrated cam1, with RMS=73.01
+INFO - Camera {'dist': array([[ 0.0275, -0.0037,  0.0172, -0.0036,  0.0001]]),
+        'image_size': (1086, 784),
+        'intrinsic': array([[ 214.6253,    0.    ,  531.2711],
+              [   0.    ,  193.1146, -126.6331],
+              [   0.    ,    0.    ,    1.    ]])}
 INFO - 
-INFO - Calibrated cam2, with RMS=0.14
-INFO - Camera {'dist': array([[  0.1684, -18.0576,   0.0016,   0.0013,  -0.0386]]),
-        'image_size': (984, 1028),
-        'intrinsic': array([[15574.6013,     0.    ,   491.5046],
-              [    0.    , 16029.2856,   513.4988],
-              [    0.    ,     0.    ,     1.    ]])}
+INFO - Calibrated cam2, with RMS=219.07
+INFO - Camera {'dist': array([[ 11.0704, -32.8636,  -0.4523,   0.5114,  20.041 ]]),
+        'image_size': (590, 1502),
+        'intrinsic': array([[ 217.11  ,    0.    ,  212.2135],
+              [   0.    , 2071.4   ,  608.6436],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=61.73
+INFO - Camera {'dist': array([[-0.9186,  1.1531, -0.0097, -0.0136, -0.4252]]),
+        'image_size': (850, 642),
+        'intrinsic': array([[305.1067,   0.    , 459.9659],
+              [  0.    , 312.253 , 281.8534],
+              [  0.    ,   0.    ,   1.    ]])}
 INFO - 
 INFO - Pose counts:
-INFO - Total: 2, cameras: {'cam1': 1, 'cam2': 1}, Boards: {'charucoBR': 2}
+INFO - Total: 6, cameras: {'cam1': 2, 'cam2': 2, 'cam3': 2}, Boards: {'charucoBR': 3, 'charucoTR': 3}
+INFO - Camera-board matrix
+INFO - [[1 1]
+        [1 1]
+        [1 1]]
 INFO - Overlaps by camera:
-INFO - [[  0. 267.]
-        [267.   0.]]
-INFO - Selected master 0 and pairs [(0, 1)]
-INFO - Estimate transform axis=0, pair (0, 1), inliers 1/1
-INFO - RMS (frobius): 0.0000 (0.0000) (deg): 0.0000 (0.0000) (trans): 0.0000 (0.0000)
-INFO - [[  0.9999   0.0001  -0.0146   0.9539]
-        [  0.0003   0.9996   0.028   -1.0023]
-        [  0.0146  -0.028    0.9995 -16.8087]
-        [  0.       0.       0.       1.    ]]
+INFO - [[  0. 420. 389.]
+        [420.   0. 492.]
+        [389. 492.   0.]]
+INFO - Selected master 1 and pairs [(1, 2), (1, 0)]
+INFO - Estimate transform axis=0, pair (1, 2), inliers 2/2
+INFO - RMS (frobius): 1.8667 (1.8667) (deg): 94.8732 (94.8732) (trans): 0.5133 (0.5133)
+INFO - [[ 0.8038 -0.3184 -0.5025  0.2404]
+        [ 0.5822  0.2471  0.7746 -0.6067]
+        [-0.1224 -0.9152  0.384   0.1787]
+        [ 0.      0.      0.      1.    ]]
+INFO - Estimate transform axis=0, pair (1, 0), inliers 2/2
+INFO - RMS (frobius): 1.9968 (1.9968) (deg): 115.1257 (115.1257) (trans): 0.9965 (0.9965)
+INFO - [[ 0.7312 -0.3369 -0.5931  0.2529]
+        [-0.6715 -0.5083 -0.5392  1.0762]
+        [-0.1198  0.7926 -0.5979  0.478 ]
+        [ 0.      0.      0.      1.    ]]
 INFO - Overlaps by board:
-INFO - [[0.]]
-INFO - Selected master 0 and pairs []
-INFO - Initialisation reprojection RMS=0.137, n=534, quantiles=[0.0065 0.0713 0.1118 0.1568 0.3978]
+INFO - [[  0. 631.]
+        [631.   0.]]
+INFO - Selected master 0 and pairs [(0, 1)]
+INFO - Estimate transform axis=2, pair (0, 1), inliers 3/3
+INFO - RMS (frobius): 1.6761 (1.6761) (deg): 71.6197 (71.6197) (trans): 0.2830 (0.2830)
+INFO - [[-0.1877 -0.2569 -0.948   0.34  ]
+        [ 0.1638  0.9435 -0.2881 -0.2792]
+        [ 0.9685 -0.2094 -0.135  -0.1066]
+        [ 0.      0.      0.      1.    ]]
+INFO - Initialisation reprojection RMS=11225307.902, n=1468, quantiles=[5.8933e-01 3.4470e+01 1.2809e+02 2.8178e+02 4.2622e+08]
 INFO - Beginning adjustments (3) enabled: {cameras=True, boards=False, camera_poses=True, board_poses=True, motion=True}, options: {'loss': 'linear', 'tolerance': 0.0001}
-INFO - Adjust_outliers 0: reprojection RMS=0.137, n=534, quantiles=[0.0065 0.0713 0.1118 0.1568 0.3978]
-INFO - Rejecting 0 outliers with error > 0.78 pixels, keeping 534 / 534 inliers, (100.00%)
+INFO - Adjust_outliers 0: reprojection RMS=11225307.902, n=1468, quantiles=[5.8933e-01 3.4470e+01 1.2809e+02 2.8178e+02 4.2622e+08]
+INFO - Rejecting 156 outliers with error > 1408.89 pixels, keeping 1312 / 1468 inliers, (89.37%)
 INFO - Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality
-INFO - 0              1         5.0442e+00                                    5.92e+00
-INFO - 1              3         5.0382e+00      5.97e-03       1.98e+03       1.07e+04
-INFO - 2              4         5.0267e+00      1.15e-02       3.61e+04       1.91e+03
-INFO - 3              5         5.0171e+00      9.56e-03       9.39e+04       2.61e+03
-INFO - 4              6         5.0038e+00      1.33e-02       1.89e+05       7.49e+03
-INFO - 5              7         4.9970e+00      6.83e-03       3.01e+05       1.82e+04
-INFO - 6              8         4.9953e+00      1.68e-03       2.62e+02       2.58e+01
-INFO - 7              9         4.9953e+00      2.07e-06       5.83e+02       3.42e+01
+INFO - 0              1         6.1261e+07                                    2.37e+11
+INFO - 1              2         1.6505e+07      4.48e+07       1.87e+03       2.87e+10
+INFO - 2              3         1.4984e+07      1.52e+06       2.14e+02       5.73e+09
+INFO - 3              4         1.1906e+07      3.08e+06       2.65e+02       2.23e+10
+INFO - 4              6         1.0888e+07      1.02e+06       7.44e+01       4.73e+09
+INFO - 5              7         1.0745e+07      1.43e+05       1.48e+02       3.12e+09
+INFO - 6              8         1.0585e+07      1.60e+05       1.41e+02       5.74e+08
+INFO - 7              9         1.0548e+07      3.67e+04       1.35e+02       1.14e+08
+INFO - 8             10         1.0528e+07      2.00e+04       1.50e+02       6.63e+08
+INFO - 9             12         1.0518e+07      1.02e+04       2.71e+01       2.09e+08
+INFO - 10             13         1.0512e+07      6.00e+03       5.11e+01       4.64e+07
+INFO - 11             14         1.0505e+07      7.01e+03       1.00e+02       4.10e+07
+INFO - 12             15         1.0492e+07      1.30e+04       1.36e+02       1.30e+08
+INFO - 13             16         1.0475e+07      1.68e+04       1.31e+02       1.61e+08
+INFO - 14             17         1.0470e+07      4.47e+03       2.26e+02       7.58e+08
+INFO - 15             18         1.0431e+07      3.88e+04       7.42e+01       4.10e+08
+INFO - 16             19         1.0417e+07      1.48e+04       8.17e+01       1.39e+08
+INFO - 17             20         1.0411e+07      5.63e+03       1.27e+02       7.36e+08
+INFO - 18             21         1.0384e+07      2.70e+04       1.00e+02       3.65e+08
+INFO - 19             23         1.0377e+07      7.05e+03       3.10e+01       3.23e+08
+INFO - 20             24         1.0371e+07      5.55e+03       6.36e+01       2.67e+08
+INFO - 21             26         1.0368e+07      3.28e+03       2.84e+01       1.82e+08
+INFO - 22             27         1.0364e+07      4.04e+03       4.99e+01       2.23e+08
+INFO - 23             29         1.0362e+07      2.45e+03       2.03e+01       1.33e+08
+INFO - 24             30         1.0359e+07      2.58e+03       4.09e+01       1.69e+08
+INFO - 25             31         1.0359e+07      2.89e+02       3.91e+01       9.78e+07
+INFO - 26             32         1.0353e+07      5.90e+03       7.83e+00       4.12e+07
+INFO - 27             33         1.0352e+07      7.57e+02       9.24e+00       2.45e+07
 INFO - `ftol` termination condition is satisfied.
-INFO - Function evaluations 9, initial cost 5.0442e+00, final cost 4.9953e+00, first-order optimality 3.42e+01.
-INFO - Adjust_outliers 1: reprojection RMS=0.137 (0.137), n=534 (534), quantiles=[0.012  0.0722 0.111  0.1577 0.3922]
-INFO - Rejecting 0 outliers with error > 0.79 pixels, keeping 534 / 534 inliers, (100.00%)
+INFO - Function evaluations 33, initial cost 6.1261e+07, final cost 1.0352e+07, first-order optimality 2.45e+07.
+INFO - Adjust_outliers 1: reprojection RMS=125.621 (89336.293), n=1312 (1468), quantiles=[      0.127       11.2912      40.992      125.5637 2934643.1762]
+INFO - Rejecting 27 outliers with error > 627.82 pixels, keeping 1441 / 1468 inliers, (98.16%)
 INFO - Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality
-INFO - 0              1         4.9953e+00                                    3.42e+01
-INFO - 1              2         4.9953e+00      1.22e-06       1.51e+03       1.19e+01
+INFO - 0              1         1.4197e+07                                    3.66e+08
+INFO - 1              2         1.3802e+07      3.94e+05       3.06e+02       2.23e+10
+INFO - 2              4         1.3269e+07      5.33e+05       8.23e+01       6.29e+09
+INFO - 3              5         1.3245e+07      2.44e+04       1.42e+02       1.88e+10
+INFO - 4              6         1.2935e+07      3.10e+05       1.91e+01       1.76e+08
+INFO - 5              7         1.2920e+07      1.53e+04       2.68e+01       1.63e+08
+INFO - 6              8         1.2909e+07      1.07e+04       5.00e+01       7.43e+08
+INFO - 7             10         1.2900e+07      8.57e+03       2.59e+01       1.91e+08
+INFO - 8             11         1.2890e+07      1.03e+04       5.34e+01       3.45e+08
+INFO - 9             13         1.2884e+07      6.28e+03       2.59e+01       1.75e+08
+INFO - 10             14         1.2876e+07      8.10e+03       5.08e+01       1.70e+08
+INFO - 11             16         1.2870e+07      6.17e+03       2.43e+01       1.21e+08
+INFO - 12             17         1.2862e+07      7.51e+03       4.58e+01       1.83e+08
+INFO - 13             19         1.2856e+07      6.42e+03       2.27e+01       3.89e+08
+INFO - 14             20         1.2848e+07      7.56e+03       4.39e+01       2.95e+08
+INFO - 15             22         1.2842e+07      5.94e+03       2.32e+01       4.13e+08
+INFO - 16             23         1.2836e+07      6.12e+03       4.58e+01       3.84e+08
+INFO - 17             25         1.2832e+07      4.20e+03       2.47e+01       2.95e+08
+INFO - 18             26         1.2827e+07      4.37e+03       4.87e+01       4.34e+08
+INFO - 19             28         1.2824e+07      2.94e+03       2.52e+01       1.76e+08
+INFO - 20             29         1.2821e+07      3.47e+03       4.95e+01       4.65e+08
+INFO - 21             31         1.2819e+07      2.28e+03       2.47e+01       1.04e+08
+INFO - 22             32         1.2816e+07      3.05e+03       4.81e+01       4.62e+08
+INFO - 23             34         1.2814e+07      2.00e+03       2.35e+01       7.72e+07
+INFO - 24             35         1.2811e+07      2.91e+03       4.57e+01       4.45e+08
+INFO - 25             37         1.2809e+07      1.92e+03       2.21e+01       1.12e+08
+INFO - 26             38         1.2806e+07      2.81e+03       4.27e+01       4.17e+08
+INFO - 27             40         1.2804e+07      1.87e+03       2.05e+01       1.85e+08
+INFO - 28             41         1.2802e+07      2.68e+03       3.99e+01       4.25e+08
+INFO - 29             43         1.2800e+07      1.75e+03       1.92e+01       3.73e+08
+INFO - 30             44         1.2797e+07      2.34e+03       3.79e+01       9.04e+08
+INFO - 31             45         1.2796e+07      1.37e+03       3.73e+01       2.41e+09
+INFO - 32             46         1.2791e+07      5.23e+03       3.70e+01       1.40e+09
+INFO - 33             48         1.2789e+07      1.54e+03       1.93e+01       3.93e+09
+INFO - 34             49         1.2787e+07      2.65e+03       1.97e+01       2.46e+09
+INFO - 35             51         1.2786e+07      8.40e+02       1.04e+01       4.09e+09
 INFO - `ftol` termination condition is satisfied.
-INFO - Function evaluations 2, initial cost 4.9953e+00, final cost 4.9953e+00, first-order optimality 1.19e+01.
-INFO - Adjust_outliers 2: reprojection RMS=0.137 (0.137), n=534 (534), quantiles=[0.0121 0.0722 0.1109 0.1577 0.3922]
-INFO - Rejecting 0 outliers with error > 0.79 pixels, keeping 534 / 534 inliers, (100.00%)
+INFO - Function evaluations 51, initial cost 1.4197e+07, final cost 1.2786e+07, first-order optimality 4.09e+09.
+INFO - Adjust_outliers 2: reprojection RMS=133.213 (2929247.466), n=1441 (1468), quantiles=[4.3779e-01 1.1858e+01 4.1151e+01 1.2670e+02 1.0955e+08]
+INFO - Rejecting 24 outliers with error > 633.48 pixels, keeping 1444 / 1468 inliers, (98.37%)
 INFO - Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality
-INFO - 0              1         4.9953e+00                                    1.19e+01
-INFO - 1              2         4.9953e+00      3.72e-07       4.33e+02       7.10e+00
+INFO - 0              1         1.3072e+07                                    4.09e+09
+INFO - 1              2         1.2957e+07      1.15e+05       7.06e+01       1.42e+11
+INFO - 2              5         1.2933e+07      2.43e+04       7.45e+00       2.68e+10
+INFO - 3              6         1.2914e+07      1.89e+04       7.89e+00       7.28e+10
+INFO - 4              7         1.2909e+07      4.89e+03       3.11e+01       1.44e+11
+INFO - 5              8         1.2904e+07      4.37e+03       3.48e+01       3.22e+11
+INFO - 6             10         1.2902e+07      2.43e+03       1.05e+01       2.61e+10
+INFO - 7             11         1.2901e+07      1.13e+03       2.34e+01       3.71e+10
 INFO - `ftol` termination condition is satisfied.
-INFO - Function evaluations 2, initial cost 4.9953e+00, final cost 4.9953e+00, first-order optimality 7.10e+00.
-INFO - Adjust_outliers end: reprojection RMS=0.137 (0.137), n=534 (534), quantiles=[0.012  0.0722 0.1109 0.1577 0.3922]
+INFO - Function evaluations 11, initial cost 1.3072e+07, final cost 1.2901e+07, first-order optimality 3.71e+10.
+INFO - Adjust_outliers end: reprojection RMS=133.672 (391417.129), n=1444 (1468), quantiles=[       0.4787       10.9792       41.3697      126.9042 14252778.5015]
 INFO - Exporting calibration to ./calibration.json
 INFO - Dumping state and history to ./calibration.pkl

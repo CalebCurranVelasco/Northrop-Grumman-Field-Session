@@ -25,42 +25,42 @@ boards:
 
     aruco_offset: 50
   
-  charucoBL:
-    _type_: charuco
-    size: [16, 22]
-    aruco_dict: 4X4_1000
+  # charucoBL:
+  #   _type_: charuco
+  #   size: [16, 22]
+  #   aruco_dict: 4X4_1000
 
-    square_length: 0.025
-    marker_length: 0.01875
+  #   square_length: 0.025
+  #   marker_length: 0.01875
 
-    min_rows: 3
-    min_points: 20 
+  #   min_rows: 3
+  #   min_points: 20 
 
-    aruco_offset: 100
+  #   aruco_offset: 100
   
-  charucoTL:
-    _type_: charuco
-    size: [16, 22]
-    aruco_dict: 4X4_1000
+  # charucoTL:
+  #   _type_: charuco
+  #   size: [16, 22]
+  #   aruco_dict: 4X4_1000
 
-    square_length: 0.025
-    marker_length: 0.01875
+  #   square_length: 0.025
+  #   marker_length: 0.01875
 
-    min_rows: 3
-    min_points: 20 
+  #   min_rows: 3
+  #   min_points: 20 
 
-    aruco_offset: 250
+  #   aruco_offset: 250
   
-  charucoC:
-    _type_: charuco
-    size: [16, 22]
-    aruco_dict: 4X4_1000
+  # charucoC:
+  #   _type_: charuco
+  #   size: [16, 22]
+  #   aruco_dict: 4X4_1000
 
-    square_length: 0.025
-    marker_length: 0.01875
+  #   square_length: 0.025
+  #   marker_length: 0.01875
 
-    min_rows: 3
-    min_points: 20 
+  #   min_rows: 3
+  #   min_points: 20 
 
-    aruco_offset: 300
+  #   aruco_offset: 300
  

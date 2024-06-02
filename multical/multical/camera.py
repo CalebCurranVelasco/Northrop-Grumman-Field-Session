@@ -67,20 +67,22 @@ class Camera(Parameters):
   def calibrate(boards, detections, image_size, max_iter=10, eps=1e-3,
                 model='standard', fix_aspect=False, has_skew=False, flags=0, max_images=None):
 
-    points = calibration_points(boards, detections)
-    if max_images is not None:
-      points = top_detection_coverage(points, max_images, image_size)
+      points = calibration_points(boards, detections)
+      if max_images is not None:
+          points = top_detection_coverage(points, max_images, image_size)
 
-    # termination criteria
-    criteria = (cv2.TERM_CRITERIA_EPS +
-                cv2.TERM_CRITERIA_MAX_ITER, max_iter, eps)
-    flags = Camera.flags(model, fix_aspect) | flags
+      # Ensure points are correctly shaped
+      object_points = [np.array(obj_pts, dtype=np.float32).reshape(-1, 3) for obj_pts in points.object_points]
+      image_points = [np.array(corners, dtype=np.float32).reshape(-1, 2) for corners in points.corners]
 
-    err, K, dist, _, _ = cv2.calibrateCamera(np.array(points.object_points, dtype=np.float32),
-            np.array(points.corners, dtype=np.float32), image_size, None, None, criteria=criteria, flags=flags)
+      # termination criteria
+      criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, max_iter, eps)
+      flags = Camera.flags(model, fix_aspect) | flags
 
-    return Camera(intrinsic=K, dist=dist, image_size=image_size,
-                  model=model, fix_aspect=fix_aspect, has_skew=has_skew), err
+      # Perform the calibration
+      err, K, dist, _, _ = cv2.calibrateCamera(object_points, image_points, image_size, None, None, criteria=criteria, flags=flags)
+
+      return Camera(intrinsic=K, dist=dist, image_size=image_size, model=model, fix_aspect=fix_aspect, has_skew=has_skew), err
 
   def scale_image(self, factor):
     intrinsic = self.intrinsic.copy()
