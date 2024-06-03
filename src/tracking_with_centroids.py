@@ -43,7 +43,7 @@ def imageStreamer():
 
                 if img_np is not None:
                     # Run YOLO model inference
-                    results = model(img_np, conf=0.25)
+                    results = model(img_np, conf=0.5) # was 0.25
                     rects = []
                     for result in results[0].boxes.data:
                         x1, y1, x2, y2, score, class_id = result
@@ -59,9 +59,12 @@ def imageStreamer():
                         cv2.putText(img_np, text, (centroid[0] - 10, centroid[1] - 10),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                         cv2.circle(img_np, (centroid[0], centroid[1]), 4, (0, 255, 0), -1)
+                        
+                        # Draw the bounding box for the object
+                        for (startX, startY, endX, endY) in rects:
+                            cv2.rectangle(img_np, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
                     # Display the image with predictions
-                    annotated_frame = results[0].plot()
                     cv2.imshow('Tracking', img_np)
 
                     # Check for 'Esc' key press to exit
