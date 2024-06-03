@@ -8,6 +8,7 @@ TagManager:
   - AutonomousVehicle
   - Destructor
   - RobberVehicle
+  - DestructorRobber
   layers:
   - Default
   - TransparentFX
