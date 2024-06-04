@@ -7,7 +7,9 @@ public class DeleteRobber : MonoBehaviour
 {
     public void OnCollisionEnter(Collision collision){
         if (collision.gameObject.tag == "DestructorRobber" ){
+            Debug.Log("collision with cone");
             Destroy(this.gameObject);
         }
+        Debug.Log("collision");
     }
 }

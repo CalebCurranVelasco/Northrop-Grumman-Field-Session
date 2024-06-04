@@ -72,10 +72,6 @@ INFO - Exporting calibration to ./calibration.json
 INFO - Dumping state and history to ./calibration.pkl
 INFO - Using boards:
 INFO - charucoBL CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=100, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
-INFO - Found camera directories ['cam1', 'cam2'] with 2 matching images
-INFO - Loading images..
-INFO - Using boards:
-INFO - charucoBL CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=100, size=(16, 22), num_ids=176, marker_length=0.01875, square_length=0.025, aruco_params={}}
 INFO - Found camera directories ['cam1', 'cam2'] with 1 matching images
 INFO - Loading images..
 INFO - Loaded 2 images
