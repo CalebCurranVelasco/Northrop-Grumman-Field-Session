@@ -11,6 +11,10 @@ namespace TrafficSimulation {
         [HideInInspector] public int id;
         [HideInInspector] public List<Waypoint> waypoints;
 
+        public List<Waypoint> getWaypoints(){
+            return waypoints;
+        }
+
         public bool IsOnSegment(Vector3 _p){
             TrafficSystem ts = GetComponentInParent<TrafficSystem>();
 
