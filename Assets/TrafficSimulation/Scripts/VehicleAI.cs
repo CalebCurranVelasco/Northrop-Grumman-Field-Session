@@ -327,7 +327,6 @@ namespace TrafficSimulation {
             else if(isRobberCar){
                 // Target escape location's position on screen
                 Vector3 escapeLocPos = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
-                //Debug.Log("escapeLocation (x,z): " + escapeLocPos.x + "," + escapeLocPos.z);
 
                 TrafficSimulation.Segment closestSeg = null;
                 float closestSegDist = float.MaxValue;
@@ -337,7 +336,6 @@ namespace TrafficSimulation {
                     // Location of nextSeg's last waypoint's position on screen
                     Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
                     float manhattanDist = Math.Abs(screenPos.x - escapeLocPos.x) + Math.Abs(screenPos.z - escapeLocPos.z);
-                    Debug.Log(nextSeg + " manhattanDist: " + manhattanDist);
                    
                    if(manhattanDist < closestSegDist){
                         closestSegDist = manhattanDist;

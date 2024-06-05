@@ -11,6 +11,9 @@ namespace TrafficSimulation{
         public GameObject robberVehicle; 
         public Vector3 robberLoc = Vector3.zero;
         public Vector3[] policeTargets;
+
+        private TrafficSystem trafficSystem; 
+        public List<Segment> segments;
         void Start()
         {
             // Example of finding the VehicleAI component on the same GameObject
@@ -25,17 +28,34 @@ namespace TrafficSimulation{
             // if socket recieves coordinates of robber
             if (robberLoc != Vector3.zero){
                 // find robber's current and target segement
-                int currentTarget = robberVehicleAI.getCurrentTargetSeg();
-                int futureTarget = robberVehicleAI.getFutureTargetSeg();
-                // get robber's target's 4 adjacent waypoints
-                // update police's destination
-                    // update vehicleAI to handle police vehicles and thier directions
-                
+                trafficSystem = GetComponent<TrafficSystem>();
+                segments = trafficSystem.getSegments();
 
-                return;
+                foreach(Segment segment in segments){
+                    //Find nearest waypoint 
+                    float closestWaypoint  = float.MaxValue;
+
+                    foreach(Waypoint waypoint in segments[segment].waypoints){
+                        Vector3 waypointLoc = Camera.main.WorldToScreenPoint(waypoint.transform.position);
+                        
+                        if(manhattanDist < closestSegDist){
+                            closestSegDist = manhattanDist;
+                            closestSeg = nextSeg;
+                        }
+            
+
+
+                        float d = Vector3.Distance(this.transform.position, trafficSystem.segments[currentTarget.segment].waypoints[j].transform.position);
+                        //Only take in front points
+                        Vector3 lSpace = this.transform.InverseTransformPoint(trafficSystem.segments[currentTarget.segment].waypoints[j].transform.position);
+                        if(d < minDist && lSpace.z > 0){
+                            minDist = d;
+                            currentTarget.waypoint = j;
+                        }
+                    }
+                }                
             }
         }
     }
-
 }
 
