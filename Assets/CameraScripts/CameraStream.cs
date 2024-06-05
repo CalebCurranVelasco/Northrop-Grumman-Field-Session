@@ -1,77 +1,78 @@
-using System;
-using System.Collections;
-using System.Net;
-using System.Net.Sockets;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class CameraStream : MonoBehaviour
-{
-    public Camera cam; // Reference to the Camera object in the scene
-    public string camIP = "127.0.0.1";
-    public int camPort = 8081;
-    private Texture2D camTexture; // Texture to load the image
-    private UdpClient udpClient;
-    private IPEndPoint endPoint;
-    private bool connectCam = true;
+// using System;
+// using System.Collections;
+// using System.Net;
+// using System.Net.Sockets;
+// using UnityEngine;
+// using UnityEngine.UI;
 
-    void Start()
-    {
-        camTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        udpClient = new UdpClient();
-        endPoint = new IPEndPoint(IPAddress.Parse(camIP), camPort);
-        StartCoroutine(SendVideoStream());
-    }
+// public class CameraStream : MonoBehaviour
+// {
+//     public Camera cam; // Reference to the Camera object in the scene
+//     public string camIP = "127.0.0.1";
+//     public int camPort = 8081;
+//     private Texture2D camTexture; // Texture to load the image
+//     private UdpClient udpClient;
+//     private IPEndPoint endPoint;
+//     private bool connectCam = true;
 
-    IEnumerator SendVideoStream()
-    {
-        while (connectCam)
-        {
-            yield return new WaitForSeconds(0.1f); // wait for 0.1 seconds between frames
+//     void Start()
+//     {
+//         camTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+//         udpClient = new UdpClient();
+//         endPoint = new IPEndPoint(IPAddress.Parse(camIP), camPort);
+//         StartCoroutine(SendVideoStream());
+//     }
 
-            try
-            {
-                // Capture the camera image
-                RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-                cam.targetTexture = renderTexture;
-                RenderTexture.active = renderTexture;
-                cam.Render();
+//     IEnumerator SendVideoStream()
+//     {
+//         while (connectCam)
+//         {
+//             yield return new WaitForSeconds(0.1f); // wait for 0.1 seconds between frames
 
-                camTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-                camTexture.Apply();
-                cam.targetTexture = null;
-                RenderTexture.active = null;
-                Destroy(renderTexture);
+//             try
+//             {
+//                 // Capture the camera image
+//                 RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+//                 cam.targetTexture = renderTexture;
+//                 RenderTexture.active = renderTexture;
+//                 cam.Render();
 
-                byte[] byteArray = camTexture.EncodeToJPG();
+//                 camTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+//                 camTexture.Apply();
+//                 cam.targetTexture = null;
+//                 RenderTexture.active = null;
+//                 Destroy(renderTexture);
 
-                // Split the byte array into smaller chunks
-                int chunkSize = 60000; // 60 KB chunks
-                int totalChunks = Mathf.CeilToInt(byteArray.Length / (float)chunkSize);
+//                 byte[] byteArray = camTexture.EncodeToJPG();
 
-                // Send the total number of chunks first
-                byte[] totalChunksBytes = BitConverter.GetBytes(totalChunks);
-                udpClient.Send(totalChunksBytes, totalChunksBytes.Length, endPoint);
+//                 // Split the byte array into smaller chunks
+//                 int chunkSize = 60000; // 60 KB chunks
+//                 int totalChunks = Mathf.CeilToInt(byteArray.Length / (float)chunkSize);
 
-                for (int i = 0; i < totalChunks; i++)
-                {
-                    int currentChunkSize = Mathf.Min(chunkSize, byteArray.Length - i * chunkSize);
-                    byte[] chunk = new byte[currentChunkSize + 4];
-                    Buffer.BlockCopy(BitConverter.GetBytes(i), 0, chunk, 0, 4); // Add chunk index at the start
-                    Buffer.BlockCopy(byteArray, i * chunkSize, chunk, 4, currentChunkSize);
+//                 // Send the total number of chunks first
+//                 byte[] totalChunksBytes = BitConverter.GetBytes(totalChunks);
+//                 udpClient.Send(totalChunksBytes, totalChunksBytes.Length, endPoint);
 
-                    udpClient.Send(chunk, chunk.Length, endPoint);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-        }
-    }
+//                 for (int i = 0; i < totalChunks; i++)
+//                 {
+//                     int currentChunkSize = Mathf.Min(chunkSize, byteArray.Length - i * chunkSize);
+//                     byte[] chunk = new byte[currentChunkSize + 4];
+//                     Buffer.BlockCopy(BitConverter.GetBytes(i), 0, chunk, 0, 4); // Add chunk index at the start
+//                     Buffer.BlockCopy(byteArray, i * chunkSize, chunk, 4, currentChunkSize);
 
-    void OnApplicationQuit()
-    {
-        udpClient.Close();
-    }
-}
+//                     udpClient.Send(chunk, chunk.Length, endPoint);
+//                 }
+//             }
+//             catch (Exception e)
+//             {
+//                 Debug.LogError(e);
+//             }
+//         }
+//     }
+
+//     void OnApplicationQuit()
+//     {
+//         udpClient.Close();
+//     }
+// }
