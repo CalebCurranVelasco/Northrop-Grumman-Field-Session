@@ -9,6 +9,7 @@ public class NewBehaviourScript : MonoBehaviour
     void Start()
     {
         GetPoliceTargets getPoliceTargets = GetComponent<GetPoliceTargets>();
+        TrafficSystem trafficSystemComponent = trafficSys.GetComponent<TrafficSystem>();
     }
 
     void Update()
@@ -19,7 +20,10 @@ public class NewBehaviourScript : MonoBehaviour
         if (robberLoc[0] != Vector3.zero){
             // find robber's current and target segement
             getPoliceTargets.setPoliceTargets(robberLoc);
-            // spawn police
+    
+            // set the TrafficSystem in VehicleAI to Traffic System
+            trafficSys = GameObject.Find("Traffic System");
+            newPoliceCar.GetComponent<VehicleAI>().setTrafficSystem(trafficSystemComponent);
         }
     }
 }
