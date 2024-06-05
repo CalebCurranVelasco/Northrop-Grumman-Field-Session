@@ -69,6 +69,15 @@ namespace TrafficSimulation {
         private Target currentTarget;
         private Target futureTarget;
 
+        public int getCurrentTargetSeg(){
+            return currentTarget.segment;
+        }
+
+        public int getFutureTargetSeg(){
+            return futureTarget.segment;
+        }
+
+
         void Start()
         {
             wheelDrive = this.GetComponent<WheelDrive>();
@@ -316,7 +325,6 @@ namespace TrafficSimulation {
             if(nextSegs.Count == 0)
                 return 0;
             else if(isRobberCar){
-                Debug.Log("Calculating robber's next segement****************");
                 // Target escape location's position on screen
                 Vector3 escapeLocPos = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
                 //Debug.Log("escapeLocation (x,z): " + escapeLocPos.x + "," + escapeLocPos.z);
