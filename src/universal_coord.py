@@ -2,6 +2,8 @@ import json
 import numpy as np
 import cv2
 import socket
+#import tracking_with_centroids
+#from tracking_with_centroids import centroid
 
 # Specify the file path
 file_path = r'C:\Users\Rae\Northrop-Grumman-Field-Session\multical\calibration_current.json'
@@ -63,7 +65,7 @@ def process_point(camera_id, point, Z):
     R = np.array(cam_pose['R'])
     T = np.array(cam_pose['T'])
 
-    # Undistort point
+    # Undistort pointnusing intrinsic params and the distortion
     undistorted_points = undistort_points([point], K, dist)
 
     # Convert to world coordinates
@@ -94,6 +96,7 @@ def send_to_unity(camera_id, point1, point2=None, baseline=baseline):
         s.sendall(data.encode('utf-8'))
 
 # Example usage for a single point from cam1 with corresponding point in cam2
-point_cam1 = [1440, 806]
-point_cam2 = [1420, 806]  # Corresponding point in cam2 image
+point_cam1 = [528, 636]
+#point_cam1 = [tracking_with_centroids.centroid[0], tracking_with_centroids.centroid[1]]
+point_cam2 = None  # Corresponding point in cam2 image
 send_to_unity("cam1", point_cam1, point_cam2)
