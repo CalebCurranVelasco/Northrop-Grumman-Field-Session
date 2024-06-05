@@ -12,6 +12,7 @@ namespace TrafficSimulation{
         private TrafficSystem trafficSystem; 
         public List<Segment> segments;
         public List<Waypoint> waypoints;
+        public int deltaThreshold = 1; // sensitivity to positional change as predicted direction
         void Start()
         {
             trafficSystem = GetComponent<TrafficSystem>();
@@ -42,20 +43,7 @@ namespace TrafficSimulation{
                 foreach(Waypoint waypoint in waypoints){
                     Vector3 waypointPosition = Camera.main.WorldToScreenPoint(waypoint.transform.position);
 
-                    if(robberLoc[1] == Vector3.zero){ // if no direction, return the closest waypoint
-                        float euclideanDistance = Math.Abs(waypointPosition.x - robberLoc[0].x) + Math.Abs(waypointPosition.z - robberLoc[0].z);
+                    float euclideanDistance = Math.Abs(waypointPosition.x - robberLoc[0].x) + Math.Abs(waypointPosition.z - robberLoc[0].z);
 
-                        if(euclideanDistance < closestWaypointDelta){
-                            closestWaypointDelta = euclideanDistance;
-                            closestWaypointPosition = waypointPosition;
-                        } 
-                    } else{ // return closest waypoint in direction of travel
-                        
-                    }
-                }
-            }
-            return closestWaypointPosition;
-        }
-    }
-}
-
+                    if(euclideanDistance < closestWaypointDelta){
+                        if(robberLoc[1] == Vector3.zero){ // if no direction, return the closest 
