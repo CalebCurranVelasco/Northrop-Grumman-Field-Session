@@ -59,7 +59,7 @@ class CameraHandler:
             if img_np is not None:
                 self.camera_views[addr] = img_np
 
-                results = model(img_np, conf=0.5)
+                results = model(img_np, conf=0.25)
                 rects = []
                 for result in results[0].boxes.data:
                     x1, y1, x2, y2, score, class_id = result

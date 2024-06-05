@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraScreenshot : MonoBehaviour
 {
-    public string folderPath = "Assets/NewVehicleImages";
+    public string folderPath = "Assets/FinalVehicleImages";
     private Camera _camera;
 
     private void Start()
