@@ -7,7 +7,7 @@ namespace TrafficSimulation{
     public class DeployPolice : MonoBehaviour
     {
         public Vector3[] robberLoc = {Vector3.zero, Vector3.zero};
-        public List<Vector3> policeTargets;
+        public List<Segment> policeTargets;
         private TrafficSystem trafficSystem; 
         public List<Segment> segments;
         public List<Waypoint> waypoints;
@@ -32,20 +32,10 @@ namespace TrafficSimulation{
             if (robberLoc[0] != Vector3.zero){
                 // find robber's current and target segement
                 getRobberTargetWaypoint();
-                getRobberFutureWaypoints();
+                policeTargets = currentRobberSegment.nextSegments;
             }
         }
 
-        List<Vector3> getRobberFutureWaypoints(){
-            List<Segment> nextSegs = currentRobberSegment.nextSegments;
-            
-            foreach(Segment nextSeg in nextSegs){
-                Waypoint terminalPoint = nextSeg.waypoints[waypoints.Count - 1]; // get terminal waypoint
-                policeTargets.Add(Camera.main.WorldToScreenPoint(terminalPoint.transform.position));
-            }
-
-            return policeTargets;
-        }
         Vector3 getRobberTargetWaypoint(){
             foreach(Segment segment in segments){
                 waypoints = segment.getWaypoints();
