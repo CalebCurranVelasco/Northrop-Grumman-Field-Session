@@ -7,12 +7,11 @@ namespace TrafficSimulation{
     public class DeployPolice : MonoBehaviour
     {
         public Vector3[] robberLoc = {Vector3.zero, Vector3.zero};
-        public Vector3[] policeTargets;
-
+        public List<Vector3> policeTargets;
         private TrafficSystem trafficSystem; 
         public List<Segment> segments;
         public List<Waypoint> waypoints;
-        public int deltaThreshold = 1; // sensitivity to positional change as predicted direction
+        public int deltaThreshold = 1; // sensitivity to minor coordinate fluxuation as predicted direction
         private Segment currentRobberSegment; 
         private float closestWaypointDelta = float.MaxValue;
         private Vector3 closestWaypointPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -33,21 +32,31 @@ namespace TrafficSimulation{
             if (robberLoc[0] != Vector3.zero){
                 // find robber's current and target segement
                 getRobberTargetWaypoint();
+                getRobberFutureWaypoints();
             }
         }
 
-        Vector3 getRobberTargetWaypoint()
-        {
+        List<Vector3> getRobberFutureWaypoints(){
+            List<Segment> nextSegs = currentRobberSegment.nextSegments;
+            
+            foreach(Segment nextSeg in nextSegs){
+                Waypoint terminalPoint = nextSeg.waypoints[waypoints.Count - 1]; // get terminal waypoint
+                policeTargets.Add(Camera.main.WorldToScreenPoint(terminalPoint.transform.position));
+            }
+
+            return policeTargets;
+        }
+        Vector3 getRobberTargetWaypoint(){
             foreach(Segment segment in segments){
                 waypoints = segment.getWaypoints();
 
                 foreach(Waypoint waypoint in waypoints){
                     Vector3 waypointPosition = Camera.main.WorldToScreenPoint(waypoint.transform.position);
-
                     float euclideanDistance = Math.Abs(waypointPosition.x - robberLoc[0].x) + Math.Abs(waypointPosition.z - robberLoc[0].z);
 
                     if(euclideanDistance < closestWaypointDelta){
-                        if(robberLoc[1] == Vector3.zero){ // if no direction, return the closest waypoint
+                        // if no direction, return the closest waypoint
+                        if(robberLoc[1] == Vector3.zero){ 
                             setRobberLocation(euclideanDistance, waypointPosition, null);
                         } 
                         // return closest waypoint in direction of travel

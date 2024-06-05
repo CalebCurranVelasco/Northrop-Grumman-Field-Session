@@ -14,7 +14,6 @@ namespace TrafficSimulation {
         public List<Waypoint> getWaypoints(){
             return waypoints;
         }
-
         public bool IsOnSegment(Vector3 _p){
             TrafficSystem ts = GetComponentInParent<TrafficSystem>();
 
