@@ -6,51 +6,54 @@ using UnityEngine;
 
 public class CameraStream : MonoBehaviour
 {
-    public Camera[] cameras; // Array of camera objects
+    public Camera[] cameras;
     public string camIP = "127.0.0.1";
-    public int camPort = 8081;
-    private UdpClient udpClient;
-    private IPEndPoint endPoint;
+    public int basePort = 8081;
+    private UdpClient[] udpClients;
+    private IPEndPoint[] endPoints;
     private bool connectCam = true;
+    private int frameWidth = 640;
+    private int frameHeight = 480;
 
     void Start()
     {
-        udpClient = new UdpClient();
-        endPoint = new IPEndPoint(IPAddress.Parse(camIP), camPort);
-        foreach (Camera cam in cameras)
+        udpClients = new UdpClient[cameras.Length];
+        endPoints = new IPEndPoint[cameras.Length];
+
+        for (int i = 0; i < cameras.Length; i++)
         {
-            StartCoroutine(SendVideoStream(cam));
+            int port = basePort + i;
+            udpClients[i] = new UdpClient();
+            endPoints[i] = new IPEndPoint(IPAddress.Parse(camIP), port);
+            StartCoroutine(SendVideoStream(cameras[i], udpClients[i], endPoints[i]));
         }
     }
 
-    IEnumerator SendVideoStream(Camera cam)
+    IEnumerator SendVideoStream(Camera cam, UdpClient udpClient, IPEndPoint endPoint)
     {
-        Texture2D camTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        Texture2D camTexture = new Texture2D(frameWidth, frameHeight, TextureFormat.RGB24, false);
         while (connectCam)
         {
-            yield return new WaitForSeconds(0.5f); // wait for 0.1 seconds between frames
+            yield return new WaitForSeconds(0.3f);
 
             try
             {
-                // Capture the camera image
-                RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+                RenderTexture renderTexture = new RenderTexture(frameWidth, frameHeight, 24);
                 cam.targetTexture = renderTexture;
                 RenderTexture.active = renderTexture;
                 cam.Render();
 
-                camTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                camTexture.ReadPixels(new Rect(0, 0, frameWidth, frameHeight), 0, 0);
                 camTexture.Apply();
                 cam.targetTexture = null;
                 RenderTexture.active = null;
                 Destroy(renderTexture);
 
-                byte[] byteArray = camTexture.EncodeToJPG();
-
-                // Split the byte array into smaller chunks
-                int chunkSize = 60000; // 60 KB chunks
+                byte[] byteArray = camTexture.EncodeToJPG(50); // Reduce quality for faster transmission
+                int chunkSize = 8192; // 8 KB chunks
                 int totalChunks = Mathf.CeilToInt(byteArray.Length / (float)chunkSize);
 
-                // Send the total number of chunks first
+                // Send total chunks information once
                 byte[] totalChunksBytes = BitConverter.GetBytes(totalChunks);
                 udpClient.Send(totalChunksBytes, totalChunksBytes.Length, endPoint);
 
@@ -58,7 +61,7 @@ public class CameraStream : MonoBehaviour
                 {
                     int currentChunkSize = Mathf.Min(chunkSize, byteArray.Length - i * chunkSize);
                     byte[] chunk = new byte[currentChunkSize + 4];
-                    Buffer.BlockCopy(BitConverter.GetBytes(i), 0, chunk, 0, 4); // Add chunk index at the start
+                    Buffer.BlockCopy(BitConverter.GetBytes(i), 0, chunk, 0, 4);
                     Buffer.BlockCopy(byteArray, i * chunkSize, chunk, 4, currentChunkSize);
 
                     udpClient.Send(chunk, chunk.Length, endPoint);
@@ -74,6 +77,9 @@ public class CameraStream : MonoBehaviour
     void OnApplicationQuit()
     {
         connectCam = false;
-        udpClient.Close();
+        foreach (var udpClient in udpClients)
+        {
+            udpClient.Close();
+        }
     }
 }
