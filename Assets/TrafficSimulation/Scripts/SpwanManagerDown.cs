@@ -15,7 +15,7 @@ public class SpawnManagerDown : MonoBehaviour
         targetTime -= Time.deltaTime;        
 
         if(targetTime <= 0){
-            targetTime = Random.Range(10, 16); // set new timer for 10 to 16 sec
+            targetTime = Random.Range(12, 18); // set new timer for 12 to 18 sec
 
             GameObject newCarGameObject = Instantiate(carPrefabs[Random.Range(0, carPrefabs.Length)], transform.position, Quaternion.identity);
             newCarGameObject.transform.Rotate(1, 180, 1);
