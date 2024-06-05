@@ -184,6 +184,7 @@ MonoBehaviour:
   slowDownThresh: 5
   isRobberCar: 0
   escapeLocation: {fileID: 0}
+  policeID: -1
   vehicleStatus: 0
 --- !u!65 &396387040624281139
 BoxCollider:

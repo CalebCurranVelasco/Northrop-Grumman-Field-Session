@@ -61,8 +61,7 @@ namespace TrafficSimulation {
         [Tooltip("Add target escape location for robber vehicles")]
         public GameObject escapeLocation = null;
         [Tooltip("Select as 0, 1, or 2 if police")]
-        public int policeID = -1
-
+        public int policeID = -1;
         [HideInInspector] public Status vehicleStatus = Status.GO;
 
         private WheelDrive wheelDrive;
@@ -78,7 +77,6 @@ namespace TrafficSimulation {
         public int getFutureTargetSeg(){
             return futureTarget.segment;
         }
-
 
         void Start()
         {
@@ -347,8 +345,8 @@ namespace TrafficSimulation {
                 return closestSeg.id;
             }
             else if (policeID != -1){
-                DeployPolice policeDeploy = GetComponent<DeployPolice>();
-                return policeDeploy.policeTargets[policeID].id;
+                GetPoliceTargets getPoliceTargets = GetComponent<GetPoliceTargets>();
+                return getPoliceTargets.policeTargets[policeID].id;
             } 
             else{
                 int c = UnityEngine.Random.Range(0, nextSegs.Count);
