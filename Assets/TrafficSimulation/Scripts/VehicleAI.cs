@@ -117,14 +117,11 @@ namespace TrafficSimulation {
         }
 
         public bool CanTurnLeft(){
-            Debug.Log("checking if vehicle can turn left");
             // Check if there are obstacles in the left turn path
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, raycastLength)) {
-                Debug.Log("object detected");
                 if (hit.collider.tag == "AutonomousVehicle") {
                     // There is an obstacle in the left turn path
-                    Debug.Log("object detected in vechicle's way");
                     return false;
                 }
             }
