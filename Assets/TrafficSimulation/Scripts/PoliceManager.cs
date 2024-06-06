@@ -37,7 +37,7 @@ namespace TrafficSimulation{
            if (true){
                // update position history
                robberLoc[1] = robberLoc[0];
-               robberLoc[0] = new Vector3(-59.3f, 0.2f, -80.2f);
+               robberLoc[0] = new Vector3(-122.62f, 0.07f, 48.00f);
 
 
                // find robber's current and target segement

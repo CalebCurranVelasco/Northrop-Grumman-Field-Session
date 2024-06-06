@@ -26,13 +26,13 @@ namespace TrafficSimulation{
 
        public List<Segment> setPoliceTargets(Vector3[] robberLoc){
            foreach(Segment segment in segments){
-               // Debug.Log("segment " + segment.id);
-               waypoints = segment.getWaypoints();
+                // Debug.Log("segment " + segment.id);
+                waypoints = segment.getWaypoints();
 
 
                foreach(Waypoint waypoint in waypoints){
-                   Vector3 waypointPosition = Camera.main.WorldToScreenPoint(waypoint.transform.position);
-                   // Debug.Log(segment.id + " " + waypoint + " with coordinates: " + waypointPosition);
+                   Vector3 waypointPosition = waypoint.transform.position;
+                   Debug.Log(segment.id + " " + waypoint + " with coordinates: " + waypointPosition);
                    float euclideanDistance = Math.Abs(waypointPosition.x - robberLoc[0].x) + Math.Abs(waypointPosition.z - robberLoc[0].z);
                    // Debug.Log("segment: " + segment);
                    if(euclideanDistance < closestWaypointDelta){
