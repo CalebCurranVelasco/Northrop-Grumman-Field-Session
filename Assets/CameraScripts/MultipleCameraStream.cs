@@ -12,7 +12,7 @@ public class CameraStream : MonoBehaviour
     private UdpClient[] udpClients;
     private IPEndPoint[] endPoints;
     private bool connectCam = true;
-    private int frameWidth = 640;
+    private int frameWidth = 900;
     private int frameHeight = 480;
 
     void Start()
@@ -31,14 +31,18 @@ public class CameraStream : MonoBehaviour
 
     IEnumerator SendVideoStream(Camera cam, UdpClient udpClient, IPEndPoint endPoint)
     {
+        RenderTexture renderTexture = new RenderTexture(frameWidth, frameHeight, 24);
         Texture2D camTexture = new Texture2D(frameWidth, frameHeight, TextureFormat.RGB24, false);
         while (connectCam)
         {
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.1f); // Reduced delay for smoother streaming
 
             try
             {
-                RenderTexture renderTexture = new RenderTexture(frameWidth, frameHeight, 24);
+                // Set the camera's aspect ratio to match the texture
+                cam.aspect = (float)frameWidth / frameHeight;
+                
+                // Capture the full frame
                 cam.targetTexture = renderTexture;
                 RenderTexture.active = renderTexture;
                 cam.Render();
@@ -47,9 +51,8 @@ public class CameraStream : MonoBehaviour
                 camTexture.Apply();
                 cam.targetTexture = null;
                 RenderTexture.active = null;
-                Destroy(renderTexture);
 
-                byte[] byteArray = camTexture.EncodeToJPG(50); // Reduce quality for faster transmission
+                byte[] byteArray = camTexture.EncodeToJPG(50); // Adjust quality as needed
                 int chunkSize = 8192; // 8 KB chunks
                 int totalChunks = Mathf.CeilToInt(byteArray.Length / (float)chunkSize);
 
@@ -72,6 +75,8 @@ public class CameraStream : MonoBehaviour
                 Debug.LogError(e);
             }
         }
+
+        Destroy(renderTexture); // Cleanup render texture when done
     }
 
     void OnApplicationQuit()

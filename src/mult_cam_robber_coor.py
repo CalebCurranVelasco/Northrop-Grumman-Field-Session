@@ -7,14 +7,14 @@ from ultralytics import YOLO
 from centroid_tracker import CentroidTracker
 
 # Load the YOLO model
-model = YOLO('models/custom_yolo_model_2.0.pt')
+model = YOLO('models/custom_yolo_model_3.0.pt')
 
 # File to save the coordinates of robber car centroids
 robber_car_coords_file = "robber_car_coords.txt"
 
-def save_robber_car_coords(coords):
+def save_robber_car_coords(coords, camera_id):
     with open(robber_car_coords_file, 'a') as file:
-        file.write(f"{coords[0]}, {coords[1]}\n")
+        file.write(f"{coords[0]}, {coords[1]}, Camera: {camera_id}\n")
 
 class CameraHandler:
     def __init__(self):
@@ -88,8 +88,8 @@ class CameraHandler:
                         # Get the corresponding centroid for the "Robber Car"
                         for (objectID, centroid) in objects.items():
                             if np.all(rects[i][:2] <= centroid) and np.all(centroid <= rects[i][2:]):
-                                # Save the coordinates of the robber car centroid
-                                save_robber_car_coords(centroid)
+                                # Save the coordinates of the robber car centroid along with the camera identifier
+                                save_robber_car_coords(centroid, addr[1])
                                 break
             else:
                 print("Failed to decode image")

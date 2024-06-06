@@ -6,7 +6,7 @@ from sort import Sort
 import traceback
 
 # Load the YOLO model
-model = YOLO('models/custom_yolo_model_2.0.pt')
+model = YOLO('models/custom_yolo_model_3.0.pt')
 
 # Initialize the SORT tracker
 tracker = Sort()
