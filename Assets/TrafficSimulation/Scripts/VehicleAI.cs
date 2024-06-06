@@ -61,7 +61,7 @@ namespace TrafficSimulation {
         [Tooltip("Add target escape location for robber vehicles")]
         public GameObject escapeLocation = null;
         [Tooltip("Select as 0, 1, or 2 if police")]
-        public int policeID = -1;
+        public Segment policeTarget = null;
         [HideInInspector] public Status vehicleStatus = Status.GO;
 
         private WheelDrive wheelDrive;
@@ -326,7 +326,7 @@ namespace TrafficSimulation {
                 return 0;
             else if(isRobberCar){
                 // Target escape location's position on screen
-                Vector3 escapeLocPos = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
+                Vector3 targetLoc = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
 
                 TrafficSimulation.Segment closestSeg = null;
                 float closestSegDist = float.MaxValue;
@@ -335,19 +335,34 @@ namespace TrafficSimulation {
                 foreach(var nextSeg in nextSegs){
                     // Location of nextSeg's last waypoint's position on screen
                     Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
-                    float manhattanDist = Math.Abs(screenPos.x - escapeLocPos.x) + Math.Abs(screenPos.z - escapeLocPos.z);
-                   
-                   if(manhattanDist < closestSegDist){
+                    float manhattanDist = Math.Abs(screenPos.x - targetLoc.x) + Math.Abs(screenPos.z - targetLoc.z);
+                    
+                    if(manhattanDist < closestSegDist){
                         closestSegDist = manhattanDist;
                         closestSeg = nextSeg;
                     }
                 }
                 return closestSeg.id;
             }
-            else if (policeID != -1){
-                GetPoliceTargets getPoliceTargets = GetComponent<GetPoliceTargets>();
-                return getPoliceTargets.policeTargets[policeID].id;
-            } 
+            else if (policeTarget != null){
+                // Target escape location's position on screen
+                Vector3 targetLoc = Camera.main.WorldToScreenPoint(policeTarget.transform.position);
+
+                TrafficSimulation.Segment closestSeg = null;
+                float closestSegDist = float.MaxValue;
+
+                // Calculate closest segement to target via manhattan distance
+                foreach(var nextSeg in nextSegs){
+                    // Location of nextSeg's last waypoint's position on screen
+                    Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
+                    float manhattanDist = Math.Abs(screenPos.x - targetLoc.x) + Math.Abs(screenPos.z - targetLoc.z);
+                    
+                    if(manhattanDist < closestSegDist){
+                        closestSegDist = manhattanDist;
+                        closestSeg = nextSeg;
+                    }
+                }
+                return closestSeg.id;            } 
             else{
                 int c = UnityEngine.Random.Range(0, nextSegs.Count);
                 return nextSegs[c].id;

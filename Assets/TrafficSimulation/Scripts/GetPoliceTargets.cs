@@ -21,7 +21,7 @@ namespace TrafficSimulation{
             segments = trafficSystem.getSegments();
         }
 
-        List<Segment> setPoliceTargets(Vector3[] robberLoc){
+        public List<Segment> setPoliceTargets(Vector3[] robberLoc){
             foreach(Segment segment in segments){
                 waypoints = segment.getWaypoints();
 

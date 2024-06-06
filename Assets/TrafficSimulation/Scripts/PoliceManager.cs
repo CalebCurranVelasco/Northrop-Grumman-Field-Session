@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 namespace TrafficSimulation{
@@ -10,7 +11,7 @@ namespace TrafficSimulation{
         [Tooltip("List police vehicles")]
         public List<GameObject> policeVehicles;
         public GetPoliceTargets getPoliceTargets;
-        public List<Vector3> policeTargets;
+        public List<Segment> policeTargets;
         public TrafficSystem trafficSystem;
 
         void Start()
@@ -26,29 +27,32 @@ namespace TrafficSimulation{
             // if socket recieves coordinates of robber
             if (robberLoc[0] != Vector3.zero){
                 // find robber's current and target segement
-                // policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
-        
+                policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
+
+                // copy police and target canidates
+                List<GameObject> remainingPoliceVehicles = policeVehicles;
+                List<Segment> remainingPoliceTargets = policeTargets;
+
+                // find closest police car to each point
                 float minDist = float.MaxValue;
-                foreach (GameObject police in policeVehicles){
-                    foreach(Vector3 policeTarget in policeTargets){
-                        // Vector3 escapeLocPos = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
+                foreach (GameObject police in remainingPoliceVehicles){
+                    Vector3 policeLoc = Camera.main.WorldToScreenPoint(police.transform.position);
 
-                        // TrafficSimulation.Segment closestSeg = null;
-                        // float closestSegDist = float.MaxValue;
+                    TrafficSimulation.Segment closestTarget = null;
+                    float closestTargetDist = float.MaxValue;
 
-                        // // Calculate closest segement to target via manhattan distance
-                        // foreach(var nextSeg in nextSegs){
-                        //     // Location of nextSeg's last waypoint's position on screen
-                        //     Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
-                        //     float manhattanDist = Math.Abs(screenPos.x - escapeLocPos.x) + Math.Abs(screenPos.z - escapeLocPos.z);
-                        
-                        // if(manhattanDist < closestSegDist){
-                        //         closestSegDist = manhattanDist;
-                        //         closestSeg = nextSeg;
-                        //     }
-                        // }
+                    // Calculate closest segement to target via euclidean distance
+                    foreach(Segment policeTarget in remainingPoliceTargets){
+                        // Location of policeTarget's last waypoint's position on screen
+                        Vector3 targetLoc = Camera.main.WorldToScreenPoint(policeTarget.waypoints[policeTarget.waypoints.Count - 1].transform.position);
+                        float euclideanDist = Math.Abs(targetLoc.x - policeLoc.x) + Math.Abs(targetLoc.z - policeLoc.z);
+                    
+                        if(euclideanDist < closestTargetDist){
+                            closestTargetDist = euclideanDist;
+                            closestTarget = policeTarget;
+                        }
                     }
-
+                    // set police car's destination to selected point
 
                     // set the police car's traffic system to activate vehicle
                     police.GetComponent<VehicleAI>().setTrafficSystem(trafficSystem);
