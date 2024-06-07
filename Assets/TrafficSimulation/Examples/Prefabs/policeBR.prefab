@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 396387040624281139}
   - component: {fileID: 2410470053941511156}
   m_Layer: 3
-  m_Name: car
+  m_Name: policeBR
   m_TagString: AutonomousVehicle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,7 +184,8 @@ MonoBehaviour:
   slowDownThresh: 5
   isRobberCar: 0
   escapeLocation: {fileID: 0}
-  policeID: -1
+  policeTarget: {fileID: 0}
+  isPolice: 0
   vehicleStatus: 0
 --- !u!65 &396387040624281139
 BoxCollider:

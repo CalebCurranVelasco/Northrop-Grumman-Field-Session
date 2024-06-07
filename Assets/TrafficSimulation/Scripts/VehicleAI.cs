@@ -93,6 +93,14 @@ namespace TrafficSimulation {
 
             initMaxSpeed = wheelDrive.maxSpeed;
             SetWaypointVehicleIsOn();
+
+            if(isPolice){
+                vehicleStatus = Status.STOP;
+            }
+        }
+
+        public void setPoliceStatus(){
+            vehicleStatus = Status.GO;
         }
 
         void Update(){
@@ -348,8 +356,6 @@ namespace TrafficSimulation {
                 return closestSeg.id;
             }
             else if (isPolice && policeTarget != null){
-                Debug.Log("IS POLICE");
-                Debug.Log(policeTarget.id);
                 // Target escape location's position on screen
                 Vector3 targetLoc = Camera.main.WorldToScreenPoint(policeTarget.transform.position);
 

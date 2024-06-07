@@ -62,16 +62,11 @@ namespace TrafficSimulation{
                             // Debug.Log("closest target updated to: " + closestTarget);
                         }
                     }
-                    // set police car's destination to selected point and traffic system to activate vehicle
-                    trafficSys = GameObject.Find("Traffic System");
-                    TrafficSystem trafficSystemComponent = trafficSys.GetComponent<TrafficSystem>();
-                    police.GetComponent<VehicleAI>().setTrafficSystem(trafficSystemComponent);
-
-                    Debug.Log("closest target: " + closestTarget);
+                    // set police car's destination to selected point and set status to go
                     police.GetComponent<VehicleAI>().setPoliceTarget(closestTarget);
-                
-                    // Debug.Log("police.GetComponent<VehicleAI>().policeTarget: " + police.GetComponent<VehicleAI>().policeTarget);
-
+                    police.GetComponent<VehicleAI>().setPoliceStatus();
+                    // Debug.Log("closest target: " + closestTarget);
+            
                     remainingPoliceTargets.Remove(closestTarget);
                 }
            }

@@ -20,8 +20,6 @@ public class SpawnManager : MonoBehaviour
             GameObject newCarGameObject = Instantiate(carPrefabs[Random.Range(0, carPrefabs.Length)], transform.position, Quaternion.identity);
             newCarGameObject.transform.Rotate(1, -90, 1);
             
-            Rigidbody newCar = newCarGameObject.GetComponent<Rigidbody>(); // do i need this line?
-
             //set the TrafficSystem in VehicleAI to 
             trafficSys = GameObject.Find("Traffic System");
             TrafficSystem trafficSystemComponent = trafficSys.GetComponent<TrafficSystem>();
