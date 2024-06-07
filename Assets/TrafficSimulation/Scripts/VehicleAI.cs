@@ -61,7 +61,9 @@ namespace TrafficSimulation {
         [Tooltip("Add target escape location for robber vehicles")]
         public GameObject escapeLocation = null;
         [Tooltip("Select as 0, 1, or 2 if police")]
-        public Segment policeTarget = null;
+        public Segment policeTarget;
+        [Tooltip("Toggle for police")]
+        public bool isPolice = false;
         [HideInInspector] public Status vehicleStatus = Status.GO;
 
         private WheelDrive wheelDrive;
@@ -76,6 +78,10 @@ namespace TrafficSimulation {
 
         public int getFutureTargetSeg(){
             return futureTarget.segment;
+        }
+
+        public void setPoliceTarget(Segment target){
+            policeTarget = target;
         }
 
         void Start()
@@ -341,7 +347,9 @@ namespace TrafficSimulation {
                 }
                 return closestSeg.id;
             }
-            else if (policeTarget != null){
+            else if (isPolice && policeTarget != null){
+                Debug.Log("IS POLICE");
+                Debug.Log(policeTarget.id);
                 // Target escape location's position on screen
                 Vector3 targetLoc = Camera.main.WorldToScreenPoint(policeTarget.transform.position);
 

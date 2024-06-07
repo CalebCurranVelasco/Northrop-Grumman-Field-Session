@@ -32,7 +32,7 @@ namespace TrafficSimulation{
 
                foreach(Waypoint waypoint in waypoints){
                    Vector3 waypointPosition = waypoint.transform.position;
-                   Debug.Log(segment.id + " " + waypoint + " with coordinates: " + waypointPosition);
+                //    Debug.Log(segment.id + " " + waypoint + " with coordinates: " + waypointPosition);
                    float euclideanDistance = Math.Abs(waypointPosition.x - robberLoc[0].x) + Math.Abs(waypointPosition.z - robberLoc[0].z);
                    // Debug.Log("segment: " + segment);
                    if(euclideanDistance < closestWaypointDelta){
@@ -63,7 +63,7 @@ namespace TrafficSimulation{
                    }
                }
            }
-           Debug.Log("CURRENT ROBBER SEGMENT ID: " + currentRobberSegment);
+        //    Debug.Log("CURRENT ROBBER SEGMENT ID: " + currentRobberSegment);
            policeTargets = currentRobberSegment.nextSegments;
           
            return policeTargets;
@@ -74,7 +74,6 @@ namespace TrafficSimulation{
            closestWaypointDelta = euclideanDistance;
            closestWaypointPosition = waypointPosition;
            currentRobberSegment = segment;
-           // Debug.Log("updated currentRobberSegment: " + currentRobberSegment);
        }
    }
 }
