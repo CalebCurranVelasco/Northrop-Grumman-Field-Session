@@ -17,7 +17,6 @@ namespace TrafficSimulation{
        public List<Segment> policeTargets;
        public GameObject trafficSys;
        private CentroidCoordinate robberCoordinates;
-       public bool doStuff = true;
 
 
        void Start()
@@ -28,33 +27,32 @@ namespace TrafficSimulation{
        }
 
 
-       void Update()
-       {
-           // for testing purposes without the socket
-           // if socket recieves new coordinates of robber
-           // if (robberCoordinates.GetReceivedPosition() != robberLoc[0]){
-           //     // update position history
-           //     robberLoc[1] = robberLoc[0];
-           //     robberLoc[0] = robberCoordinates.GetReceivedPosition();
-           if (doStuff){
-                doStuff = false;
+       void Update(){
+        
+            // for testing purposes without the socket
+            // if socket recieves new coordinates of robber
+            // if (robberCoordinates.GetReceivedPosition() != robberLoc[0]){
+            // // update position history
+            // robberLoc[1] = robberLoc[0];
+            // robberLoc[0] = robberCoordinates.GetReceivedPosition();
+           
+            if(true){
+                // update position history
+                // robberLoc[1] = robberLoc[0];
+                robberLoc[0] = new Vector3(-122.62f, 0.07f, 48.00f);
+                // robberLoc[0] = new Vector3(-122.63f, 0.07f, 49.73f); // for testing
 
-               // update position history
-            //    robberLoc[1] = robberLoc[0];
-               robberLoc[0] = new Vector3(-122.62f, 0.07f, 48.00f);
-            //    robberLoc[0] = new Vector3(-122.63f, 0.07f, 49.73f); // for testing
 
-
-               // find robber's current and target segement
-               policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
+                // find robber's current and target segement
+                policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
                
-            //    Debug.Log("TARGETS:");
-            //    foreach( Segment target in policeTargets){
-            //         Debug.Log(target);
-            //    }
+                // Debug.Log("TARGETS:");
+                // foreach( Segment target in policeTargets){
+                //     Debug.Log(target);
+                // }
             
-               // copy police and target canidates
-                List<Segment> remainingPoliceTargets = policeTargets;
+                // copy police and target canidates
+                List<Segment> remainingPoliceTargets = new List<Segment>(policeTargets);
                 // int count = 0;
 
                 // find closest police car to each point

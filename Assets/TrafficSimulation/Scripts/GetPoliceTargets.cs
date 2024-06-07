@@ -29,7 +29,6 @@ namespace TrafficSimulation{
                 // Debug.Log("segment " + segment.id);
                 waypoints = segment.getWaypoints();
 
-
                foreach(Waypoint waypoint in waypoints){
                    Vector3 waypointPosition = waypoint.transform.position;
                 //    Debug.Log(segment.id + " " + waypoint + " with coordinates: " + waypointPosition);
