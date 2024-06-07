@@ -63,7 +63,7 @@ namespace TrafficSimulation{
                    }
                }
            }
-        //    Debug.Log("CURRENT ROBBER SEGMENT ID: " + currentRobberSegment);
+           Debug.Log("CURRENT ROBBER SEGMENT ID: " + currentRobberSegment);
            policeTargets = currentRobberSegment.nextSegments;
           
            return policeTargets;
