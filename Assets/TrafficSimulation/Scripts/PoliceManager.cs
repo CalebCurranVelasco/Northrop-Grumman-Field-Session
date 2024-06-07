@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
+using System.Linq.Expressions;
 
 
 
@@ -17,20 +18,33 @@ namespace TrafficSimulation{
        public List<Segment> policeTargets;
        public GameObject trafficSys;
        private CentroidCoordinate robberCoordinates;
+       public int catchingRobberDist = 8;
 
 
        void Start()
        {
            getPoliceTargets = GetComponent<GetPoliceTargets>();
-        //    trafficSystem = GetComponent<TrafficSystem>();
            robberCoordinates = GetComponent<CentroidCoordinate>();
        }
 
-
        void Update(){
+            // check if police is in proximity to robber
+            if(new Vector3(-126.99f, 0.07f, 77.75f) != Vector3.zero){
+               
+                robberLoc = new Vector3(-126.99f, 0.07f, 77.75f);
+
+                foreach (GameObject police in policeVehicles){
+                    float euclideanDist = Math.Abs(police.transform.position.x - robberLoc.x) + Math.Abs(police.transform.position.z - robberLoc.z);
+                    Debug.Log("euclideanDist: " + euclideanDist + " catching robber dist: " + catchingRobberDist);
+                    // if a police car has "caught" the robber by proximity of catchingRobberDist
+                    if(euclideanDist < catchingRobberDist){
+                        Debug.Log("ROBBER CAUGHT");
+                    }
+                }
+            }
+
             // if socket recieves new coordinates of robber
             // if (robberCoordinates.GetReceivedPosition() != robberLoc){
-            //     robberLoc = robberCoordinates.GetReceivedPosition();
 
             // for testing purposes without the socket
             if(true){
