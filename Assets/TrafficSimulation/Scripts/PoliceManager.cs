@@ -10,7 +10,7 @@ using System.Threading;
 namespace TrafficSimulation{
    public class NewBehaviourScript : MonoBehaviour
    {
-       public Vector3[] robberLoc = {Vector3.zero, Vector3.zero};
+       public Vector3 robberLoc = Vector3.zero;
        [Tooltip("List police vehicles")]
        public List<GameObject> policeVehicles;
        public GetPoliceTargets getPoliceTargets;
@@ -31,33 +31,20 @@ namespace TrafficSimulation{
         
             // for testing purposes without the socket
             // if socket recieves new coordinates of robber
-            // if (robberCoordinates.GetReceivedPosition() != robberLoc[0]){
-            // // update position history
-            // robberLoc[1] = robberLoc[0];
-            // robberLoc[0] = robberCoordinates.GetReceivedPosition();
+            // if (robberCoordinates.GetReceivedPosition() != robberLoc){
+            // robberLoc = robberCoordinates.GetReceivedPosition();
            
             if(true){
-                // update position history
-                robberLoc[0] = new Vector3(-124.04f, 0.07f, 49.57f);
-                // robberLoc[0] = new Vector3(-122.63f, 0.07f, 49.73f); // for testing
+                robberLoc = new Vector3(-124.04f, 0.07f, 49.57f);
 
                 // find robber's current and target segement
                 policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
-               
-                // Debug.Log("TARGETS:");
-                // foreach( Segment target in policeTargets){
-                //     Debug.Log(target);
-                // }
             
                 // copy police and target canidates
                 List<Segment> remainingPoliceTargets = new List<Segment>(policeTargets);
-                // int count = 0;
 
                 // find closest police car to each point
                 foreach (GameObject police in policeVehicles){
-                    // Debug.Log("police number" + count);
-                    // count ++;
-                    // Debug.Log("**************" + police);
                     Vector3 policeLoc = police.transform.position;
 
                     TrafficSimulation.Segment closestTarget = null;
