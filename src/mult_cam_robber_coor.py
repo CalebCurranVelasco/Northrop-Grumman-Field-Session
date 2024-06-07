@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import asyncio
 import time
-import socket
 from ultralytics import YOLO
 from centroid_tracker import CentroidTracker
 
@@ -12,9 +11,9 @@ model = YOLO('models/custom_yolo_model_3.0.pt')
 # File to save the coordinates of robber car centroids
 robber_car_coords_file = "robber_car_coords.txt"
 
-def save_robber_car_coords(coords, camera_id):
+def save_robber_car_coords(coords, camera_port):
     with open(robber_car_coords_file, 'a') as file:
-        file.write(f"{coords[0]}, {coords[1]}, Camera: {camera_id}\n")
+        file.write(f"{coords[0]}, {coords[1]}, Port: {camera_port}\n")
 
 class CameraHandler:
     def __init__(self):
@@ -26,11 +25,11 @@ class CameraHandler:
 
         # Create named windows for each camera feed
         cv2.namedWindow("Camera 1", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Camera 1", 640, 480)
+        cv2.resizeWindow("Camera 1", 900, 480)
         cv2.namedWindow("Camera 2", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Camera 2", 640, 480)
+        cv2.resizeWindow("Camera 2", 900, 480)
 
-    def process_data(self, data, addr):
+    def process_data(self, data, addr, port):
         if addr not in self.buffers:
             self.buffers[addr] = []
             self.expected_chunks[addr] = None
@@ -88,8 +87,8 @@ class CameraHandler:
                         # Get the corresponding centroid for the "Robber Car"
                         for (objectID, centroid) in objects.items():
                             if np.all(rects[i][:2] <= centroid) and np.all(centroid <= rects[i][2:]):
-                                # Save the coordinates of the robber car centroid along with the camera identifier
-                                save_robber_car_coords(centroid, addr[1])
+                                # Save the coordinates of the robber car centroid along with the camera port
+                                save_robber_car_coords(centroid, port)
                                 break
             else:
                 print("Failed to decode image")
@@ -120,14 +119,15 @@ class CameraHandler:
         cv2.destroyAllWindows()
 
 class UDPServerProtocol:
-    def __init__(self, camera_handler):
+    def __init__(self, camera_handler, port):
         self.camera_handler = camera_handler
+        self.port = port
 
     def connection_made(self, transport):
         self.transport = transport
 
     def datagram_received(self, data, addr):
-        self.camera_handler.process_data(data, addr)
+        self.camera_handler.process_data(data, addr, self.port)
 
 async def main():
     camera_handler = CameraHandler()
@@ -138,7 +138,7 @@ async def main():
     tasks = []
     for port in ports:
         listen = loop.create_datagram_endpoint(
-            lambda: UDPServerProtocol(camera_handler),
+            lambda: UDPServerProtocol(camera_handler, port),
             local_addr=('0.0.0.0', port)
         )
         transport, protocol = await listen

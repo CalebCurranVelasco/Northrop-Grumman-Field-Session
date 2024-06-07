@@ -35,7 +35,7 @@ public class CameraStream : MonoBehaviour
         Texture2D camTexture = new Texture2D(frameWidth, frameHeight, TextureFormat.RGB24, false);
         while (connectCam)
         {
-            yield return new WaitForSeconds(0.1f); // Reduced delay for smoother streaming
+            yield return new WaitForSeconds(0.3f); // Reduced delay for smoother streaming
 
             try
             {
