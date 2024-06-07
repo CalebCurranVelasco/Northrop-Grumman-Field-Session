@@ -28,9 +28,12 @@ def undistort_points(points, K, dist):
     return undistorted_points.reshape(-1, 2)
 
 def pixel_to_world(undistorted_points, K, R, T, Z):
+    #takes the pixel coordinates and matric and params and depth
     fx, fy = K[0, 0], K[1, 1]
     cx, cy = K[0, 2], K[1, 2]
     
+
+    #does the projection math
     x = (undistorted_points[:, 0] - cx) * Z / fx
     y = (undistorted_points[:, 1] - cy) * Z / fy
     z = Z
@@ -44,28 +47,29 @@ def pixel_to_world(undistorted_points, K, R, T, Z):
     return points_world[:3].T
 
 def compute_disparity(point1, point2):
-    # Calculate disparity between two points
+    #calculate disparity between two points (abs of difference, relative disparity)
     return abs(point1[0] - point2[0])
 
 def calculate_depth(disparity, baseline, fx):
-    # Calculate depth from disparity
+    # Calculate depth from disparity from the two cameras
     if disparity == 0:
-        return float('inf')  # Avoid division by zero
+        return float('inf')  # Avoid division by zero, automated safety if
     return (baseline * fx) / disparity
 
 def process_point(camera_id, point, Z):
     cam_params = cameras[camera_id]
+    #Changes params pulled based on what input cam name is
     cam_pose = camera_poses[camera_id if camera_id == "cam1" else "cam2_to_cam1"]
 
-    # Camera intrinsics
+    #camera intrinsics into array
     K = np.array(cam_params['K'])
     dist = np.array(cam_params['dist'][0])
 
-    # Camera pose
+    #Camera pose rotational and translational
     R = np.array(cam_pose['R'])
     T = np.array(cam_pose['T'])
 
-    # Undistort pointnusing intrinsic params and the distortion
+    #undistort the given point using intrinsic params and the distortion
     undistorted_points = undistort_points([point], K, dist)
 
     # Convert to world coordinates
@@ -73,18 +77,18 @@ def process_point(camera_id, point, Z):
     world_point = world_points[0]  # Extract the first (and only) point
 
     return world_point
-
+#runs disparity, depth, point processing)
 def send_to_unity(camera_id, point1, point2=None, baseline=baseline):
     cam_params1 = cameras['cam1']
     K1 = np.array(cam_params1['K'])
     fx1 = K1[0, 0]
 
     if point2 is not None:
-        # Using stereo vision to calculate depth
+        #using stereo vision to calculate depth (depth from disparity)
         disparity = compute_disparity(point1, point2)
         Z = calculate_depth(disparity, baseline, fx1)
     else:
-        # If no stereo point, use a fixed depth value
+        #if no stereo point, use a fixed depth value (linear depth from Unity)
         Z = 1.0
 
     world_point = process_point(camera_id, point1, Z)
@@ -92,10 +96,10 @@ def send_to_unity(camera_id, point1, point2=None, baseline=baseline):
     # Print the data to test it
     print("World Point Data:", data)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(('localhost', 65432))  # Match port with Unity script
+        s.connect(('localhost', 65432))  #match port with Unity script C# to receive vector3
         s.sendall(data.encode('utf-8'))
 
-# Example usage for a single point from cam1 with corresponding point in cam2
+#example usage for a single point from cam1 with corresponding point in cam2 / can set cam2 to None but need linear depth
 point_cam1 = [528, 636]
 #point_cam1 = [tracking_with_centroids.centroid[0], tracking_with_centroids.centroid[1]]
 point_cam2 = None  # Corresponding point in cam2 image
