@@ -29,12 +29,12 @@ namespace TrafficSimulation{
 
        void Update(){
             // if socket recieves new coordinates of robber
-            if (robberCoordinates.GetReceivedPosition() != robberLoc){
-                robberLoc = robberCoordinates.GetReceivedPosition();
+            // if (robberCoordinates.GetReceivedPosition() != robberLoc){
+            //     robberLoc = robberCoordinates.GetReceivedPosition();
 
             // for testing purposes without the socket
-            // if(true){
-                // robberLoc = new Vector3(-126.99f, 0.07f, 77.75f);
+            if(true){
+                robberLoc = new Vector3(-126.99f, 0.07f, 77.75f);
 
                 // find robber's current and target segement
                 policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
@@ -58,7 +58,6 @@ namespace TrafficSimulation{
                         if(euclideanDist < closestTargetDist){
                             closestTargetDist = euclideanDist;
                             closestTarget = policeTarget;
-                            // Debug.Log("closest target updated to: " + closestTarget);
                         }
                     }
 
