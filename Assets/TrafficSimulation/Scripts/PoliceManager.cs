@@ -38,10 +38,8 @@ namespace TrafficSimulation{
            
             if(true){
                 // update position history
-                // robberLoc[1] = robberLoc[0];
-                robberLoc[0] = new Vector3(-122.62f, 0.07f, 48.00f);
+                robberLoc[0] = new Vector3(-124.04f, 0.07f, 49.57f);
                 // robberLoc[0] = new Vector3(-122.63f, 0.07f, 49.73f); // for testing
-
 
                 // find robber's current and target segement
                 policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
