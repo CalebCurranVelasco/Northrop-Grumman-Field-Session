@@ -28,14 +28,13 @@ namespace TrafficSimulation{
 
 
        void Update(){
-        
-            // for testing purposes without the socket
             // if socket recieves new coordinates of robber
-            // if (robberCoordinates.GetReceivedPosition() != robberLoc){
-            // robberLoc = robberCoordinates.GetReceivedPosition();
-           
-            if(true){
-                robberLoc = new Vector3(-124.04f, 0.07f, 49.57f);
+            if (robberCoordinates.GetReceivedPosition() != robberLoc){
+                robberLoc = robberCoordinates.GetReceivedPosition();
+
+            // for testing purposes without the socket
+            // if(true){
+                // robberLoc = new Vector3(-126.99f, 0.07f, 77.75f);
 
                 // find robber's current and target segement
                 policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
@@ -62,10 +61,17 @@ namespace TrafficSimulation{
                             // Debug.Log("closest target updated to: " + closestTarget);
                         }
                     }
+
+                    // if no more targets remain, dont send an officer
+                    if(remainingPoliceTargets.Count == 0){
+                        Debug.Log("no targets remaining");
+                        break;
+                    }
+
                     // set police car's destination to selected point and set status to go
                     police.GetComponent<VehicleAI>().setPoliceTarget(closestTarget);
                     police.GetComponent<VehicleAI>().setPoliceStatus();
-                    // Debug.Log("closest target: " + closestTarget);
+                    Debug.Log("closest target: " + closestTarget);
             
                     remainingPoliceTargets.Remove(closestTarget);
                 }
