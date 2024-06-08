@@ -13,12 +13,13 @@ model = YOLO('models/custom_yolo_model_3.0.pt')
 robber_car_coords_file = "robber_car_coords.txt"
 
 last_sent_time = time.time() #for interval purposes
-unity_socket_ip = '127.0.0.1'  #Unity socket IP
-unity_socket_port = 15000       #Unity socket port
-interval = 3                   #Interval to send data to Unity (in seconds)
+unity_socket_ip = '127.0.0.1'  #unity socket IP
+unity_socket_port = 15000       #unity socket port
+interval = 3                   #interval to send data to unity (in seconds)
  #Declare socket 
 unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+#modified to directly send instead of write to file
 def save_robber_car_coords(coords, socket, ip, port, camera_port):
     #with open(robber_car_coords_file, 'a') as file:
     #    file.write(f"{coords[0]}, {coords[1]}, Port: {camera_port}\n")
@@ -97,10 +98,11 @@ class CameraHandler:
                         # Get the corresponding centroid for the "Robber Car"
                         for (objectID, centroid) in objects.items():
                             if np.all(rects[i][:2] <= centroid) and np.all(centroid <= rects[i][2:]):
+                                #check the sending interval
                                 current_time = time.time()
                                 if current_time - last_sent_time >= interval:
                                     last_sent_time = current_time
-                                    # Save the coordinates of the robber car centroid along with the camera port
+                                    #save (send) the coordinates of the robber car centroid along with the camera port
                                     save_robber_car_coords(centroid, unity_socket, unity_socket_ip, unity_socket_port, port)
                                     #print(f"Sent coordinates to Unity: {coords}")
                                 break

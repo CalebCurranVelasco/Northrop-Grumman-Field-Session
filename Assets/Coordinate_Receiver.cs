@@ -35,7 +35,7 @@ public class Coordinate_Receiver : MonoBehaviour
             Camera selectedCamera = (port == 8081) ? cameraBirdsEye : cameraBirdsEye1;
             receivedPosition = ScreenPointToWorld(selectedCamera, (int)pixelCoords.x, (int)pixelCoords.y);
 
-            //Log that it has received coordinates in world space
+            //log that it has received coordinates in world space
             Debug.Log($"Converted world coordinates: {receivedPosition}");
         }
     }
@@ -60,7 +60,7 @@ public class Coordinate_Receiver : MonoBehaviour
                     //enqueue the received coordinates with the port
                     coordQueue.Enqueue((new Vector2(u, v), port));
 
-                    //Log that you have received pixel coordinates
+                    //log that you have received pixel coordinates
                     Debug.Log($"Received coordinates: ({u}, {v}) from port: {port}");
                 }
             }
@@ -73,7 +73,7 @@ public class Coordinate_Receiver : MonoBehaviour
 
     Vector3 ScreenPointToWorld(Camera camera, int u, int v)
     {
-        //Calculate based on camera ray cast and plane where point is in 3d
+        //calculate based on camera ray cast and plane where point is in 3d
         Ray ray = camera.ScreenPointToRay(new Vector3(u, v, 0));
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         if (groundPlane.Raycast(ray, out float enter))
