@@ -4,25 +4,27 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 public class Coordinate_Receiver : MonoBehaviour
 {
     public Camera cameraBirdsEye;
     public Camera cameraBirdsEye1;
     private UdpClient udpClient;
-    private Thread receiveThread;
+    private Task receiveTask;
+    private CancellationTokenSource cancellationTokenSource;
     private ConcurrentQueue<(Vector2, int)> coordQueue;
     private Vector3 receivedPosition;
     private bool isRunning;
+    
 
     void Start()
     {
         udpClient = new UdpClient(15000);
         coordQueue = new ConcurrentQueue<(Vector2, int)>();
+        cancellationTokenSource = new CancellationTokenSource();
         isRunning = true;
-        receiveThread = new Thread(new ThreadStart(ReceiveData));
-        receiveThread.IsBackground = true;
-        receiveThread.Start();
+        receiveTask = Task.Run(() => ReceiveData(cancellationTokenSource.Token));
     }
 
     void Update()
@@ -39,29 +41,41 @@ public class Coordinate_Receiver : MonoBehaviour
         }
     }
 
-    void ReceiveData()
+    async void ReceiveData(CancellationToken cancellationToken)
     {
         IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
         while (isRunning)
         {
             try
             {
-                if (udpClient.Available > 0)
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    byte[] data = udpClient.Receive(ref anyIP);
-                    string text = Encoding.UTF8.GetString(data);
-                    string[] parts = text.Split(new string[] { ", ", "Port: " }, System.StringSplitOptions.None);
+                    break;
+                }
 
-                    if (parts.Length == 3)
-                    {
-                        int u = int.Parse(parts[0]);
-                        int v = int.Parse(parts[1]);
-                        int port = int.Parse(parts[2]);
+                Debug.Log("Waiting for data...");
+                UdpReceiveResult result = await udpClient.ReceiveAsync();
+                Debug.Log("Data received");
 
-                        coordQueue.Enqueue((new Vector2(u, v), port));
+                string text = Encoding.UTF8.GetString(result.Buffer);
+                Debug.Log($"Received text: {text}");
 
-                        Debug.Log($"Received coordinates: ({u}, {v}) from port: {port}");
-                    }
+                string[] parts = text.Split(new char[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+                if (parts.Length == 4)
+                {
+                    Debug.Log("Parsing data");
+                    int u = int.Parse(parts[0]);
+                    int v = int.Parse(parts[1]);
+                    int port = int.Parse(parts[3]);  // Port number is the fourth part
+
+                    coordQueue.Enqueue((new Vector2(u, v), port));
+
+                    Debug.Log($"Received coordinates: ({u}, {v}) from port: {port}");
+                }
+                else
+                {
+                    Debug.Log("Incorrect message format");
                 }
             }
             catch (SocketException ex)
@@ -89,10 +103,7 @@ public class Coordinate_Receiver : MonoBehaviour
     void OnDestroy()
     {
         isRunning = false;
-        if (receiveThread != null && receiveThread.IsAlive)
-        {
-            receiveThread.Join(); // Wait for the thread to finish
-        }
+        cancellationTokenSource.Cancel();
         if (udpClient != null)
         {
             udpClient.Close();
@@ -103,11 +114,4 @@ public class Coordinate_Receiver : MonoBehaviour
     {
         return receivedPosition;
     }
-
-    // Uncomment to visualize received positions
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawSphere(receivedPosition, 0.5f);
-    //}
 }

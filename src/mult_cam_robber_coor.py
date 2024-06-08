@@ -9,21 +9,19 @@ import socket
 # Load the YOLO model
 model = YOLO('models/custom_yolo_model_3.0.pt')
 
-# File to save the coordinates of robber car centroids
-robber_car_coords_file = "robber_car_coords.txt"
-
-last_sent_time = time.time() #for interval purposes
-unity_socket_ip = '127.0.0.1'  #unity socket IP
-unity_socket_port = 15000       #unity socket port
-interval = 3                   #interval to send data to unity (in seconds)
- #Declare socket 
+# Network and interval settings
+unity_socket_ip = '127.0.0.1'  # Unity socket IP
+unity_socket_port = 15000       # Unity socket port
+interval = 3                   # Interval to send data to Unity (in seconds)
 unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-#modified to directly send instead of write to file
+# Resolution
+resolution = (900, 480)
+
+# Modified to directly send instead of write to file
 def save_robber_car_coords(coords, socket, ip, port, camera_port):
-    #with open(robber_car_coords_file, 'a') as file:
-    #    file.write(f"{coords[0]}, {coords[1]}, Port: {camera_port}\n")
     message = f"{coords[0]}, {coords[1]}, Port: {camera_port}"
+    print(f"Sending message: {message}")
     socket.sendto(message.encode(), (ip, port))
 
 class CameraHandler:
@@ -33,12 +31,14 @@ class CameraHandler:
         self.camera_views = {}
         self.centroid_trackers = {}
         self.current_camera_index = 0
+        self.last_sent_time = time.time()
 
         # Create named windows for each camera feed
+        self.window_size = resolution  # Define the window size
         cv2.namedWindow("Camera 1", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Camera 1", 900, 480)
+        cv2.resizeWindow("Camera 1", *self.window_size)
         cv2.namedWindow("Camera 2", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Camera 2", 900, 480)
+        cv2.resizeWindow("Camera 2", *self.window_size)
 
     def process_data(self, data, addr, port):
         if addr not in self.buffers:
@@ -74,9 +74,10 @@ class CameraHandler:
             img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
             if img_np is not None:
+                img_np = cv2.resize(img_np, self.window_size)  # Ensure the image is resized to the expected resolution
                 self.camera_views[addr] = img_np
 
-                results = model(img_np, conf=0.25)
+                results = model(img_np, conf=0.5)
                 rects = []
                 class_ids = []
                 for result in results[0].boxes.data:
@@ -98,13 +99,13 @@ class CameraHandler:
                         # Get the corresponding centroid for the "Robber Car"
                         for (objectID, centroid) in objects.items():
                             if np.all(rects[i][:2] <= centroid) and np.all(centroid <= rects[i][2:]):
-                                #check the sending interval
-                                current_time = time.time()
-                                if current_time - last_sent_time >= interval:
-                                    last_sent_time = current_time
-                                    #save (send) the coordinates of the robber car centroid along with the camera port
-                                    save_robber_car_coords(centroid, unity_socket, unity_socket_ip, unity_socket_port, port)
-                                    print(f"Sent coordinates to Unity: {centroid}")
+                                # Check the sending interval
+                                # current_time = time.time()
+                                # if current_time - self.last_sent_time >= interval:
+                                #     self.last_sent_time = current_time
+                                    # Save (send) the coordinates of the robber car centroid along with the camera port
+                                save_robber_car_coords(centroid, unity_socket, unity_socket_ip, unity_socket_port, port)
+                                print(f"Sent coordinates to Unity: {centroid}")
                                 break
             else:
                 print("Failed to decode image")
@@ -113,7 +114,7 @@ class CameraHandler:
 
     async def image_display(self):
         # Initialize variables to store last displayed frames
-        last_frames = {addr: np.zeros((480, 640, 3), dtype=np.uint8) for addr in self.camera_views}
+        last_frames = {addr: np.zeros((*self.window_size[::-1], 3), dtype=np.uint8) for addr in self.camera_views}
 
         while True:
             if self.camera_views:
@@ -149,7 +150,6 @@ async def main():
     camera_handler = CameraHandler()
     loop = asyncio.get_running_loop()
 
-   
     # Create a datagram endpoint and start the server for each camera port
     ports = [8081, 8082]  # List of ports for each camera
     tasks = []
@@ -165,7 +165,7 @@ async def main():
         camera_handler.image_display()
     )
 
-    #Close the socket
+    # Close the socket
     unity_socket.close()
 
 if __name__ == "__main__":
