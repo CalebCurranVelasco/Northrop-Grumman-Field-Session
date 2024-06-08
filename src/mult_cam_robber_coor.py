@@ -104,7 +104,7 @@ class CameraHandler:
                                     last_sent_time = current_time
                                     #save (send) the coordinates of the robber car centroid along with the camera port
                                     save_robber_car_coords(centroid, unity_socket, unity_socket_ip, unity_socket_port, port)
-                                    #print(f"Sent coordinates to Unity: {coords}")
+                                    print(f"Sent coordinates to Unity: {centroid}")
                                 break
             else:
                 print("Failed to decode image")
