@@ -7,34 +7,36 @@ using System.Collections.Concurrent;
 
 public class Coordinate_Receiver : MonoBehaviour
 {
-    public new Camera camera;
+    public Camera cameraBirdsEye;
+    public Camera cameraBirdsEye1;
     private UdpClient udpClient;
     private Thread receiveThread;
-    private ConcurrentQueue<Vector2> coordQueue;
-    private Vector3[] worldCoords;
-    private int maxCoords = 10;  // Maximum number of coordinates to keep track of
-    private int coordIndex = 0;
+    private ConcurrentQueue<(Vector2, int)> coordQueue;
+    private Vector3 receivedPosition;
 
     void Start()
     {
         udpClient = new UdpClient(8082);
-        coordQueue = new ConcurrentQueue<Vector2>();
+        coordQueue = new ConcurrentQueue<(Vector2, int)>();
         receiveThread = new Thread(new ThreadStart(ReceiveData));
         receiveThread.IsBackground = true;
         receiveThread.Start();
-        worldCoords = new Vector3[maxCoords];
     }
 
     void Update()
     {
-        while (coordQueue.TryDequeue(out Vector2 pixelCoords))
+        while (coordQueue.TryDequeue(out var item))
         {
-            Vector3 worldPoint = ScreenPointToWorld((int)pixelCoords.x, (int)pixelCoords.y);
-            worldCoords[coordIndex] = worldPoint;
-            coordIndex = (coordIndex + 1) % maxCoords;
+            //Reads in the two coordinates and the port from message
+            Vector2 pixelCoords = item.Item1;
+            int port = item.Item2;
 
-            // Log received coordinates in world space
-            Debug.Log($"Converted world coordinates: {worldPoint}");
+            //if port equals 8081, set selectedCamera to CameraBirdsEye. Otherwise, set selectedCamera to CameraBirdsEye1.
+            Camera selectedCamera = (port == 8081) ? cameraBirdsEye : cameraBirdsEye1;
+            receivedPosition = ScreenPointToWorld(selectedCamera, (int)pixelCoords.x, (int)pixelCoords.y);
+
+            //Log that it has received coordinates in world space
+            Debug.Log($"Converted world coordinates: {receivedPosition}");
         }
     }
 
@@ -47,18 +49,19 @@ public class Coordinate_Receiver : MonoBehaviour
             {
                 byte[] data = udpClient.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
-                string[] coords = text.Split(',');
-
-                if (coords.Length == 2)
+                string[] parts = text.Split(new string[] { ", ", "Port: " }, System.StringSplitOptions.None);
+                //parse through received message
+                if (parts.Length == 3)
                 {
-                    int u = int.Parse(coords[0]);
-                    int v = int.Parse(coords[1]);
+                    int u = int.Parse(parts[0]);
+                    int v = int.Parse(parts[1]);
+                    int port = int.Parse(parts[2]);
 
-                    // Enqueue the received coordinates
-                    coordQueue.Enqueue(new Vector2(u, v));
+                    //enqueue the received coordinates with the port
+                    coordQueue.Enqueue((new Vector2(u, v), port));
 
-                    // Log received coordinates
-                    Debug.Log($"Received coordinates: ({u}, {v})");
+                    //Log that you have received pixel coordinates
+                    Debug.Log($"Received coordinates: ({u}, {v}) from port: {port}");
                 }
             }
             catch (System.Exception ex)
@@ -68,8 +71,9 @@ public class Coordinate_Receiver : MonoBehaviour
         }
     }
 
-    Vector3 ScreenPointToWorld(int u, int v)
+    Vector3 ScreenPointToWorld(Camera camera, int u, int v)
     {
+        //Calculate based on camera ray cast and plane where point is in 3d
         Ray ray = camera.ScreenPointToRay(new Vector3(u, v, 0));
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         if (groundPlane.Raycast(ray, out float enter))
@@ -93,12 +97,16 @@ public class Coordinate_Receiver : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+    //Method to get the received position for prediction later
+    public Vector3 GetReceivedPosition()
     {
-        Gizmos.color = Color.red;
-        foreach (var worldCoord in worldCoords)
-        {
-            Gizmos.DrawSphere(worldCoord, 0.5f);
-        }
+        return receivedPosition;
     }
+
+    //Test for drawing the sphere to see where it ended up
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawSphere(receivedPosition, 0.5f);
+    //}
 }
