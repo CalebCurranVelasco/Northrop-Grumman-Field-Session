@@ -4,7 +4,7 @@ import time
 # Configuration
 file_path = "robber_car_coords.txt"
 unity_socket_ip = '127.0.0.1'  # Unity socket IP
-unity_socket_port = 8082       # Unity socket port
+unity_socket_port = 15000       # Unity socket port
 interval = 2                   # Interval to send data to Unity (in seconds)
 
 def read_coords_from_file(file_path):

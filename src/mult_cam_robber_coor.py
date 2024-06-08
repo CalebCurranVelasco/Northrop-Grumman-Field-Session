@@ -4,6 +4,7 @@ import asyncio
 import time
 from ultralytics import YOLO
 from centroid_tracker import CentroidTracker
+import socket
 
 # Load the YOLO model
 model = YOLO('models/custom_yolo_model_3.0.pt')
@@ -11,9 +12,18 @@ model = YOLO('models/custom_yolo_model_3.0.pt')
 # File to save the coordinates of robber car centroids
 robber_car_coords_file = "robber_car_coords.txt"
 
-def save_robber_car_coords(coords, camera_port):
-    with open(robber_car_coords_file, 'a') as file:
-        file.write(f"{coords[0]}, {coords[1]}, Port: {camera_port}\n")
+last_sent_time = time.time() #for interval purposes
+unity_socket_ip = '127.0.0.1'  #Unity socket IP
+unity_socket_port = 15000       #Unity socket port
+interval = 3                   #Interval to send data to Unity (in seconds)
+ #Declare socket 
+unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+def save_robber_car_coords(coords, socket, ip, port, camera_port):
+    #with open(robber_car_coords_file, 'a') as file:
+    #    file.write(f"{coords[0]}, {coords[1]}, Port: {camera_port}\n")
+    message = f"{coords[0]}, {coords[1]}, Port: {camera_port}"
+    socket.sendto(message.encode(), (ip, port))
 
 class CameraHandler:
     def __init__(self):
@@ -87,8 +97,12 @@ class CameraHandler:
                         # Get the corresponding centroid for the "Robber Car"
                         for (objectID, centroid) in objects.items():
                             if np.all(rects[i][:2] <= centroid) and np.all(centroid <= rects[i][2:]):
-                                # Save the coordinates of the robber car centroid along with the camera port
-                                save_robber_car_coords(centroid, port)
+                                current_time = time.time()
+                                if current_time - last_sent_time >= interval:
+                                    last_sent_time = current_time
+                                    # Save the coordinates of the robber car centroid along with the camera port
+                                    save_robber_car_coords(centroid, unity_socket, unity_socket_ip, unity_socket_port, port)
+                                    #print(f"Sent coordinates to Unity: {coords}")
                                 break
             else:
                 print("Failed to decode image")
@@ -133,6 +147,7 @@ async def main():
     camera_handler = CameraHandler()
     loop = asyncio.get_running_loop()
 
+   
     # Create a datagram endpoint and start the server for each camera port
     ports = [8081, 8082]  # List of ports for each camera
     tasks = []
@@ -147,6 +162,9 @@ async def main():
     await asyncio.gather(
         camera_handler.image_display()
     )
+
+    #Close the socket
+    unity_socket.close()
 
 if __name__ == "__main__":
     asyncio.run(main())

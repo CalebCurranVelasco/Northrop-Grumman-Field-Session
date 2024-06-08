@@ -16,7 +16,7 @@ public class Coordinate_Receiver : MonoBehaviour
 
     void Start()
     {
-        udpClient = new UdpClient(8082);
+        udpClient = new UdpClient(15000);
         coordQueue = new ConcurrentQueue<(Vector2, int)>();
         receiveThread = new Thread(new ThreadStart(ReceiveData));
         receiveThread.IsBackground = true;
