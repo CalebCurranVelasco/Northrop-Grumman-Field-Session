@@ -97,13 +97,19 @@ public class Coordinate_Receiver : MonoBehaviour
         // Invert the y-coordinate to reflect the flipped z-axis origin
         screenPoint.y = camera.pixelHeight - screenPoint.y;
 
-        if (camera == cameraBirdsEye)
-        {
-            screenPoint.x -= 26f;
-        }
+        // if (camera == cameraBirdsEye)
+        // {
+        //     screenPoint.x -= 21f;
+        // }
 
         Ray ray = camera.ScreenPointToRay(screenPoint);
         Debug.Log($"Screen point: {screenPoint}, Ray origin: {ray.origin}, Ray direction: {ray.direction}");
+
+        if (camera == cameraBirdsEye)
+        {
+            // Adjust the x-value of the ray origin by adding 2
+            ray.origin += new Vector3(-1f, 0f, 0f);
+        } 
 
         // Assuming the ground is at y = 0
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
