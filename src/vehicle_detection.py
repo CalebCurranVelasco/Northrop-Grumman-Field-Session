@@ -4,7 +4,7 @@ import socket
 from ultralytics import YOLO
 
 # Load the YOLO model
-model = YOLO('models/custom_yolo_model_2.0.pt')
+model = YOLO('models/custom_yolo_model_3.0.pt')
 
 def imageStreamer():
     udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

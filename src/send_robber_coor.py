@@ -6,7 +6,7 @@ from ultralytics import YOLO
 from centroid_tracker import CentroidTracker
 
 # Load the YOLO model
-model = YOLO('models/custom_yolo_model_2.0.pt')
+model = YOLO('models/custom_yolo_model_3.0.pt')
 
 # File to save the coordinates of robber car centroids
 robber_car_coords_file = "robber_car_coords.txt"
