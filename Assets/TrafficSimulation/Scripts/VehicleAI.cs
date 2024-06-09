@@ -47,6 +47,7 @@ namespace TrafficSimulation {
         public bool isRobberCar = false;
 
         [Tooltip("Add target escape location for robber vehicles")]
+        public List<GameObject> escapeLocations;
         public GameObject escapeLocation = null;
 
         [Tooltip("Select as 0, 1, or 2 if police")]
@@ -77,6 +78,12 @@ namespace TrafficSimulation {
         }
 
         void Start() {
+            if(isRobberCar){
+                int escapeIndex = UnityEngine.Random.Range(0, escapeLocations.Count - 1);
+                escapeLocation = escapeLocations[escapeIndex];
+            }
+            
+
             wheelDrive = this.GetComponent<WheelDrive>();
 
             if (trafficSystem == null)
