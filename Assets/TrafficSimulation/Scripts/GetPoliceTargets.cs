@@ -21,7 +21,7 @@ namespace TrafficSimulation {
             closestWaypointDelta = float.MaxValue;
             currentRobberSegment = null;
 
-            // Find the segment containing the waypoint the robber is heading towards
+            // Find the segment closest to the robber's location
             foreach (Segment segment in segments) {
                 waypoints = segment.getWaypoints();
 
@@ -38,31 +38,8 @@ namespace TrafficSimulation {
 
             // Check if a segment containing the robber's waypoint is found
             if (currentRobberSegment != null) {
-                // Find adjacent waypoints within a certain distance (e.g., 8 units)
-                List<Waypoint> adjacentWaypoints = new List<Waypoint>();
-                foreach (Segment segment in segments) {
-                    waypoints = segment.getWaypoints();
-
-                    foreach (Waypoint waypoint in waypoints) {
-                        Vector3 waypointPosition = waypoint.transform.position;
-                        float euclideanDistance = Vector3.Distance(waypointPosition, currentRobberSegment.getWaypoints()[0].transform.position);
-
-                        if (euclideanDistance <= 8f) {
-                            adjacentWaypoints.Add(waypoint);
-                        }
-                    }
-                }
-
-                // Find segments containing these adjacent waypoints
-                policeTargets = new List<Segment>();
-                foreach (Waypoint waypoint in adjacentWaypoints) {
-                    foreach (Segment segment in segments) {
-                        if (segment.getWaypoints().Contains(waypoint)) {
-                            policeTargets.Add(segment);
-                            break;
-                        }
-                    }
-                }
+                // Add all next segments of the current segment to police targets
+                policeTargets = new List<Segment>(currentRobberSegment.nextSegments);
             } else {
                 // If the segment containing the robber's waypoint is not found, return an empty list
                 policeTargets = new List<Segment>();
