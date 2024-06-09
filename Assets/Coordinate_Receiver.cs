@@ -16,7 +16,6 @@ public class Coordinate_Receiver : MonoBehaviour
     private ConcurrentQueue<(Vector2, int)> coordQueue;
     private Vector3 receivedPosition;
     private bool isRunning;
-    
 
     void Start()
     {
@@ -37,6 +36,7 @@ public class Coordinate_Receiver : MonoBehaviour
             Camera selectedCamera = (port == 8081) ? cameraBirdsEye : cameraBirdsEye1;
             receivedPosition = ScreenPointToWorld(selectedCamera, (int)pixelCoords.x, (int)pixelCoords.y);
 
+            Debug.Log($"Received pixel coordinates: ({pixelCoords.x}, {pixelCoords.y}) from port: {port}");
             Debug.Log($"Converted world coordinates: {receivedPosition}");
         }
     }
@@ -91,12 +91,29 @@ public class Coordinate_Receiver : MonoBehaviour
 
     Vector3 ScreenPointToWorld(Camera camera, int u, int v)
     {
-        Ray ray = camera.ScreenPointToRay(new Vector3(u, v, 0));
+        // Adjust screenPoint based on the resolution
+        Vector3 screenPoint = new Vector3(u, v, camera.nearClipPlane);
+        
+        // Invert the y-coordinate to reflect the flipped z-axis origin
+        screenPoint.y = camera.pixelHeight - screenPoint.y;
+
+        if (camera == cameraBirdsEye)
+        {
+            screenPoint.x -= 26f;
+        }
+
+        Ray ray = camera.ScreenPointToRay(screenPoint);
+        Debug.Log($"Screen point: {screenPoint}, Ray origin: {ray.origin}, Ray direction: {ray.direction}");
+
+        // Assuming the ground is at y = 0
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         if (groundPlane.Raycast(ray, out float enter))
         {
-            return ray.GetPoint(enter);
+            Vector3 worldPoint = ray.GetPoint(enter);
+            Debug.Log($"World point: {worldPoint}, Raycast distance: {enter}");
+            return worldPoint;
         }
+        Debug.Log("Ray did not intersect with the ground plane.");
         return Vector3.zero;
     }
 
