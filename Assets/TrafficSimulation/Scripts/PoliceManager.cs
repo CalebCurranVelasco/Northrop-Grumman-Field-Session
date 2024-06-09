@@ -43,6 +43,7 @@ namespace TrafficSimulation{
 
             // if socket recieves new coordinates of robber
             if (robberCoordinates.GetReceivedPosition() != robberLoc){
+                Debug.Log("COORDINATES RECIEVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                 robberLoc = robberCoordinates.GetReceivedPosition();
 
