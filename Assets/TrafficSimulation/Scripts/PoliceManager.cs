@@ -29,12 +29,10 @@ namespace TrafficSimulation{
 
        void Update(){
             // check if police is in proximity to robber
-            if(new Vector3(-126.99f, 0.07f, 77.75f) != Vector3.zero){
+            if(robberLoc != Vector3.zero){
                
-                robberLoc = new Vector3(-126.99f, 0.07f, 77.75f);
-
                 foreach (GameObject police in policeVehicles){
-                    float euclideanDist = Math.Abs(police.transform.position.x - robberLoc.x) + Math.Abs(police.transform.position.z - robberLoc.z);
+                    float euclideanDist = Math.Abs(police.transform.position.x - robberCoordinates.GetReceivedPosition().x) + Math.Abs(police.transform.position.z - robberCoordinates.GetReceivedPosition().z);
                     Debug.Log("euclideanDist: " + euclideanDist + " catching robber dist: " + catchingRobberDist);
                     // if a police car has "caught" the robber by proximity of catchingRobberDist
                     if(euclideanDist < catchingRobberDist){
@@ -44,11 +42,9 @@ namespace TrafficSimulation{
             }
 
             // if socket recieves new coordinates of robber
-            // if (robberCoordinates.GetReceivedPosition() != robberLoc){
+            if (robberCoordinates.GetReceivedPosition() != robberLoc){
 
-            // for testing purposes without the socket
-            if(true){
-                robberLoc = new Vector3(-126.99f, 0.07f, 77.75f);
+                robberLoc = robberCoordinates.GetReceivedPosition();
 
                 // find robber's current and target segement
                 policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
