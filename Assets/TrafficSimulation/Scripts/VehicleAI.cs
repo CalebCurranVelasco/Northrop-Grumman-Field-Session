@@ -1,6 +1,3 @@
-// Traffic Simulation
-// https://github.com/mchrbn/unity-traffic-simulation
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,37 +5,26 @@ using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 namespace TrafficSimulation {
-
-    /*
-        [-] Check prefab #6 issue
-        [-] Deaccelerate when see stop in front
-        [-] Smooth sharp turns when two segments are linked
-        
-    */
-
-    public struct Target{
+    public struct Target {
         public int segment;
         public int waypoint;
     }
 
-    public enum Status{
+    public enum Status {
         GO,
         STOP,
         SLOW_DOWN
     }
 
-    public class VehicleAI : MonoBehaviour
-    {
+    public class VehicleAI : MonoBehaviour {
         [Header("Traffic System")]
         [Tooltip("Current active traffic system")]
         public TrafficSystem trafficSystem;
 
-        [Tooltip("Determine when the vehicle has reached its target. Can be used to \"anticipate\" earlier the next waypoint (the higher this number his, the earlier it will anticipate the next waypoint)")]
+        [Tooltip("Determine when the vehicle has reached its target. Can be used to \"anticipate\" earlier the next waypoint (the higher this number is, the earlier it will anticipate the next waypoint)")]
         public float waypointThresh = 2.5f;
 
-
         [Header("Radar")]
-
         [Tooltip("Empty gameobject from where the rays will be casted")]
         public Transform raycastAnchor;
 
@@ -56,15 +42,21 @@ namespace TrafficSimulation {
 
         [Tooltip("If detected vehicle is below this distance (and above, above distance), ego vehicle will slow down")]
         public float slowDownThresh = 5f;
+
         [Tooltip("Toggle to select as robber")]
         public bool isRobberCar = false;
+
         [Tooltip("Add target escape location for robber vehicles")]
         public GameObject escapeLocation = null;
+
         [Tooltip("Select as 0, 1, or 2 if police")]
         public Segment policeTarget;
+
         [Tooltip("Toggle for police")]
         public bool isPolice = false;
-        [HideInInspector] public Status vehicleStatus = Status.GO;
+
+        [HideInInspector]
+        public Status vehicleStatus = Status.GO;
 
         private WheelDrive wheelDrive;
         private float initMaxSpeed = 0;
@@ -72,231 +64,186 @@ namespace TrafficSimulation {
         private Target currentTarget;
         private Target futureTarget;
 
-        public int getCurrentTargetSeg(){
+        public int getCurrentTargetSeg() {
             return currentTarget.segment;
         }
 
-        public int getFutureTargetSeg(){
+        public int getFutureTargetSeg() {
             return futureTarget.segment;
         }
 
-        public void setPoliceTarget(Segment target){
+        public void setPoliceTarget(Segment target) {
             policeTarget = target;
         }
 
-        void Start()
-        {
+        void Start() {
             wheelDrive = this.GetComponent<WheelDrive>();
 
-            if(trafficSystem == null)
+            if (trafficSystem == null)
                 return;
 
             initMaxSpeed = wheelDrive.maxSpeed;
             SetWaypointVehicleIsOn();
 
-            if(isPolice){
+            if (isPolice) {
                 vehicleStatus = Status.STOP;
             }
         }
 
-        public void setPoliceStatus(){
+        public void setPoliceStatus() {
             vehicleStatus = Status.GO;
         }
 
-        void Update(){
-            if(trafficSystem == null)
+        void Update() {
+            if (trafficSystem == null)
                 return;
 
             WaypointChecker();
             MoveVehicle();
         }
 
-        public void setTrafficSystem(TrafficSystem trafficSys){
+        public void setTrafficSystem(TrafficSystem trafficSys) {
             trafficSystem = trafficSys;
         }
 
-        public bool IsTurningLeft(){
-            // Get the current waypoint and the next waypoint
+        public bool IsTurningLeft() {
             Waypoint currentWaypoint = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint];
             Waypoint nextWaypoint = trafficSystem.segments[futureTarget.segment].waypoints[futureTarget.waypoint];
-
-            // Calculate the direction from the current waypoint to the next waypoint
             Vector3 direction = nextWaypoint.transform.position - currentWaypoint.transform.position;
-
-            // Calculate the angle between the vehicle's forward direction and the direction to the next waypoint
             float angle = Vector3.SignedAngle(transform.forward, direction, Vector3.up);
-
-            // Check if the angle indicates a left turn (between 45 and 135 degrees)
             return angle > 35f && angle < 135f;
         }
 
-        public bool CanTurnLeft(){
-            // Check if there are obstacles in the left turn path
+        public bool CanTurnLeft() {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, raycastLength)) {
                 if (hit.collider.tag == "AutonomousVehicle") {
-                    // There is an obstacle in the left turn path
                     return false;
                 }
             }
             return true;
         }
 
-        void WaypointChecker(){
+        void WaypointChecker() {
             GameObject waypoint = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint].gameObject;
-
-            //Position of next waypoint relative to the car
             Vector3 wpDist = this.transform.InverseTransformPoint(new Vector3(waypoint.transform.position.x, this.transform.position.y, waypoint.transform.position.z));
 
-            //Go to next waypoint if arrived to current
-            if(wpDist.magnitude < waypointThresh){
-                //Get next target
+            if (wpDist.magnitude < waypointThresh) {
                 currentTarget.waypoint++;
-                if(currentTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count){
+                if (currentTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count) {
                     pastTargetSegment = currentTarget.segment;
                     currentTarget.segment = futureTarget.segment;
                     currentTarget.waypoint = 0;
+
+                    // If the police car has reached its target segment, set status to STOP
+                    if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id) {
+                        vehicleStatus = Status.STOP;
+                        return;
+                    }
                 }
 
-                //Get future target
                 futureTarget.waypoint = currentTarget.waypoint + 1;
-                if(futureTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count){
+                if (futureTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count) {
                     futureTarget.waypoint = 0;
                     futureTarget.segment = GetNextSegmentId();
                 }
             }
+            else if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id && vehicleStatus == Status.GO) {
+                // If the police car has already reached its target, set status to STOP
+                vehicleStatus = Status.STOP;
+            }
         }
 
-        void MoveVehicle(){
-
-            //Default, full acceleration, no break and no steering
+        void MoveVehicle() {
             float acc = 1;
             float brake = 0;
             float steering = 0;
             wheelDrive.maxSpeed = initMaxSpeed;
 
-            //Calculate if there is a planned turn
             Transform targetTransform = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint].transform;
             Transform futureTargetTransform = trafficSystem.segments[futureTarget.segment].waypoints[futureTarget.waypoint].transform;
             Vector3 futureVel = futureTargetTransform.position - targetTransform.position;
             float futureSteering = Mathf.Clamp(this.transform.InverseTransformDirection(futureVel.normalized).x, -1, 1);
 
-            //Check if the car has to stop
-            if(vehicleStatus == Status.STOP){
+            if (vehicleStatus == Status.STOP) {
                 acc = 0;
                 brake = 1;
                 wheelDrive.maxSpeed = Mathf.Min(wheelDrive.maxSpeed / 2f, 5f);
-            }
-            else{
-                
-                //Not full acceleration if have to slow down
-                if(vehicleStatus == Status.SLOW_DOWN){
+            } else {
+                if (vehicleStatus == Status.SLOW_DOWN) {
                     acc = .3f;
                     brake = 0f;
                 }
 
-                //If planned to steer, decrease the speed
-                if(futureSteering > .3f || futureSteering < -.3f){
+                if (futureSteering > .3f || futureSteering < -.3f) {
                     wheelDrive.maxSpeed = Mathf.Min(wheelDrive.maxSpeed, wheelDrive.steeringSpeedMax);
                 }
 
-                //2. Check if there are obstacles which are detected by the radar
                 float hitDist;
                 GameObject obstacle = GetDetectedObstacles(out hitDist);
 
-                //Check if we hit something
-                if(obstacle != null){
-
+                if (obstacle != null) {
                     WheelDrive otherVehicle = null;
                     otherVehicle = obstacle.GetComponent<WheelDrive>();
 
-                    ///////////////////////////////////////////////////////////////
-                    //Differenciate between other vehicles AI and generic obstacles (including controlled vehicle, if any)
-                    if(otherVehicle != null){
-                        //Check if it's front vehicle
+                    if (otherVehicle != null) {
                         float dotFront = Vector3.Dot(this.transform.forward, otherVehicle.transform.forward);
 
-                        //If detected front vehicle max speed is lower than ego vehicle, then decrease ego vehicle max speed
-                        if(otherVehicle.maxSpeed < wheelDrive.maxSpeed && dotFront > .8f){
+                        if (otherVehicle.maxSpeed < wheelDrive.maxSpeed && dotFront > .8f) {
                             float ms = Mathf.Max(wheelDrive.GetSpeedMS(otherVehicle.maxSpeed) - .5f, .1f);
                             wheelDrive.maxSpeed = wheelDrive.GetSpeedUnit(ms);
                         }
-                        
-                        //If the two vehicles are too close, and facing the same direction, brake the ego vehicle
-                        if(hitDist < emergencyBrakeThresh && dotFront > .8f){
+
+                        if (hitDist < emergencyBrakeThresh && dotFront > .8f) {
                             acc = 0;
                             brake = 1;
                             wheelDrive.maxSpeed = Mathf.Max(wheelDrive.maxSpeed / 2f, wheelDrive.minSpeed);
-                        }
-
-                        //If the two vehicles are too close, and not facing same direction, slight make the ego vehicle go backward
-                        else if(hitDist < emergencyBrakeThresh && dotFront <= .8f){
+                        } else if (hitDist < emergencyBrakeThresh && dotFront <= .8f) {
                             acc = -.3f;
                             brake = 0f;
                             wheelDrive.maxSpeed = Mathf.Max(wheelDrive.maxSpeed / 2f, wheelDrive.minSpeed);
-
-                            //Check if the vehicle we are close to is located on the right or left then apply according steering to try to make it move
                             float dotRight = Vector3.Dot(this.transform.forward, otherVehicle.transform.right);
-                            //Right
-                            if(dotRight > 0.1f) steering = -.3f;
-                            //Left
-                            else if(dotRight < -0.1f) steering = .3f;
-                            //Middle
+                            if (dotRight > 0.1f) steering = -.3f;
+                            else if (dotRight < -0.1f) steering = .3f;
                             else steering = -.7f;
-                        }
-
-                        // //If the two vehicles are getting close, slow down their speed
-                        else if(hitDist < slowDownThresh){
+                        } else if (hitDist < slowDownThresh) {
                             acc = .5f;
                             brake = 0f;
-                            //wheelDrive.maxSpeed = Mathf.Max(wheelDrive.maxSpeed / 1.5f, wheelDrive.minSpeed);
                         }
-                    }
-
-                    ///////////////////////////////////////////////////////////////////
-                    // Generic obstacles
-                    else{
-                        //Emergency brake if getting too close
-                        if(hitDist < emergencyBrakeThresh){
+                    } else {
+                        if (hitDist < emergencyBrakeThresh) {
                             acc = 0;
                             brake = 1;
                             wheelDrive.maxSpeed = Mathf.Max(wheelDrive.maxSpeed / 2f, wheelDrive.minSpeed);
-                        }
-
-                        //Otherwise if getting relatively close decrease speed
-                         else if(hitDist < slowDownThresh){
+                        } else if (hitDist < slowDownThresh) {
                             acc = .5f;
                             brake = 0f;
                         }
                     }
                 }
 
-                //Check if we need to steer to follow path
-                if(acc > 0f){
+                if (acc > 0f) {
                     Vector3 desiredVel = trafficSystem.segments[currentTarget.segment].waypoints[currentTarget.waypoint].transform.position - this.transform.position;
                     steering = Mathf.Clamp(this.transform.InverseTransformDirection(desiredVel.normalized).x, -1f, 1f);
                 }
-
             }
 
-            //Move the car
             wheelDrive.Move(acc, steering, brake);
         }
 
-
-        GameObject GetDetectedObstacles(out float _hitDist){
+        GameObject GetDetectedObstacles(out float _hitDist) {
             GameObject detectedObstacle = null;
             float minDist = 1000f;
 
             float initRay = (raysNumber / 2f) * raySpacing;
-            float hitDist =  -1f;
-            for(float a=-initRay; a<=initRay; a+=raySpacing){
+            float hitDist = -1f;
+            for (float a = -initRay; a <= initRay; a += raySpacing) {
                 CastRay(raycastAnchor.transform.position, a, this.transform.forward, raycastLength, out detectedObstacle, out hitDist);
 
-                if(detectedObstacle == null) continue;
+                if (detectedObstacle == null) continue;
 
                 float dist = Vector3.Distance(this.transform.position, detectedObstacle.transform.position);
-                if(dist < minDist) {
+                if (dist < minDist) {
                     minDist = dist;
                     break;
                 }
@@ -306,94 +253,81 @@ namespace TrafficSimulation {
             return detectedObstacle;
         }
 
-        
-        void CastRay(Vector3 _anchor, float _angle, Vector3 _dir, float _length, out GameObject _outObstacle, out float _outHitDistance){
+        void CastRay(Vector3 _anchor, float _angle, Vector3 _dir, float _length, out GameObject _outObstacle, out float _outHitDistance) {
             _outObstacle = null;
             _outHitDistance = -1f;
 
-            //Draw raycast
             Debug.DrawRay(_anchor, Quaternion.Euler(0, _angle, 0) * _dir * _length, new Color(1, 0, 0, 0.5f));
 
-            //Detect hit only on the autonomous vehicle layer
             int layer = 1 << LayerMask.NameToLayer("AutonomousVehicle");
             int finalMask = layer;
 
-            foreach(string layerName in trafficSystem.collisionLayers){
+            foreach (string layerName in trafficSystem.collisionLayers) {
                 int id = 1 << LayerMask.NameToLayer(layerName);
                 finalMask = finalMask | id;
             }
 
             RaycastHit hit;
-            if(Physics.Raycast(_anchor, Quaternion.Euler(0, _angle, 0) * _dir, out hit, _length, finalMask)){
+            if (Physics.Raycast(_anchor, Quaternion.Euler(0, _angle, 0) * _dir, out hit, _length, finalMask)) {
                 _outObstacle = hit.collider.gameObject;
                 _outHitDistance = hit.distance;
             }
         }
 
-        int GetNextSegmentId(){
+        int GetNextSegmentId() {
             List<TrafficSimulation.Segment> nextSegs = trafficSystem.segments[currentTarget.segment].nextSegments;
-            
-            if(nextSegs.Count == 0)
+
+            if (nextSegs.Count == 0)
                 return 0;
-            else if(isRobberCar){
-                // Target escape location's position on screen
+            else if (isRobberCar) {
                 Vector3 targetLoc = Camera.main.WorldToScreenPoint(escapeLocation.transform.position);
 
                 TrafficSimulation.Segment closestSeg = null;
                 float closestSegDist = float.MaxValue;
 
-                // Calculate closest segement to target via manhattan distance
-                foreach(var nextSeg in nextSegs){
-                    // Location of nextSeg's last waypoint's position on screen
+                foreach (var nextSeg in nextSegs) {
                     Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
                     float manhattanDist = Math.Abs(screenPos.x - targetLoc.x) + Math.Abs(screenPos.z - targetLoc.z);
-                    
-                    if(manhattanDist < closestSegDist){
+
+                    if (manhattanDist < closestSegDist) {
                         closestSegDist = manhattanDist;
                         closestSeg = nextSeg;
                     }
                 }
                 return closestSeg.id;
-            }
-            else if (isPolice && policeTarget != null){
-                // Target escape location's position on screen
+            } else if (isPolice && policeTarget != null) {
                 Vector3 targetLoc = Camera.main.WorldToScreenPoint(policeTarget.transform.position);
 
                 TrafficSimulation.Segment closestSeg = null;
                 float closestSegDist = float.MaxValue;
 
-                // Calculate closest segement to target via manhattan distance
-                foreach(var nextSeg in nextSegs){
-                    // Location of nextSeg's last waypoint's position on screen
+                foreach (var nextSeg in nextSegs) {
                     Vector3 screenPos = Camera.main.WorldToScreenPoint(nextSeg.waypoints[nextSeg.waypoints.Count - 1].transform.position);
                     float manhattanDist = Math.Abs(screenPos.x - targetLoc.x) + Math.Abs(screenPos.z - targetLoc.z);
-                    
-                    if(manhattanDist < closestSegDist){
+
+                    if (manhattanDist < closestSegDist) {
                         closestSegDist = manhattanDist;
                         closestSeg = nextSeg;
                     }
                 }
-                return closestSeg.id;            } 
-            else{
+                return closestSeg.id;
+            } else {
                 int c = UnityEngine.Random.Range(0, nextSegs.Count);
                 return nextSegs[c].id;
             }
         }
 
-        void SetWaypointVehicleIsOn(){
-            //Find current target
-            foreach(Segment segment in trafficSystem.segments){
-                if(segment.IsOnSegment(this.transform.position)){
+        void SetWaypointVehicleIsOn() {
+            foreach (Segment segment in trafficSystem.segments) {
+                if (segment.IsOnSegment(this.transform.position)) {
                     currentTarget.segment = segment.id;
 
-                    //Find nearest waypoint to start within the segment
                     float minDist = float.MaxValue;
-                    for(int j=0; j<trafficSystem.segments[currentTarget.segment].waypoints.Count; j++){
+                    for (int j = 0; j < trafficSystem.segments[currentTarget.segment].waypoints.Count; j++) {
                         float d = Vector3.Distance(this.transform.position, trafficSystem.segments[currentTarget.segment].waypoints[j].transform.position);
 
-                        //Only take in front points
                         Vector3 lSpace = this.transform.InverseTransformPoint(trafficSystem.segments[currentTarget.segment].waypoints[j].transform.position);
-                        if(d < minDist && lSpace.z > 0){
+                        if (d < minDist && lSpace.z > 0) {
                             minDist = d;
                             currentTarget.waypoint = j;
                         }
@@ -402,25 +336,25 @@ namespace TrafficSimulation {
                 }
             }
 
-            //Get future target
             futureTarget.waypoint = currentTarget.waypoint + 1;
             futureTarget.segment = currentTarget.segment;
 
-            if(futureTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count){
+            if (futureTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count) {
                 futureTarget.waypoint = 0;
                 futureTarget.segment = GetNextSegmentId();
             }
         }
 
-        public int GetSegmentVehicleIsIn(){
+        public int GetSegmentVehicleIsIn() {
             int vehicleSegment = currentTarget.segment;
             bool isOnSegment = trafficSystem.segments[vehicleSegment].IsOnSegment(this.transform.position);
-            if(!isOnSegment){
+            if (!isOnSegment) {
                 bool isOnPSegement = trafficSystem.segments[pastTargetSegment].IsOnSegment(this.transform.position);
-                if(isOnPSegement)
+                if (isOnPSegement)
                     vehicleSegment = pastTargetSegment;
             }
             return vehicleSegment;
         }
+        
     }
 }

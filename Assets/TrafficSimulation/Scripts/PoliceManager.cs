@@ -24,7 +24,7 @@ namespace TrafficSimulation {
             // Check if police is in proximity to robber
             if (robberLoc != Vector3.zero) {
                 foreach (GameObject police in policeVehicles) {
-                    float euclideanDist = Math.Abs(police.transform.position.x - robberCoordinates.GetReceivedPosition().x) + Math.Abs(police.transform.position.z - robberCoordinates.GetReceivedPosition().z);
+                    float euclideanDist = Vector3.Distance(police.transform.position, robberCoordinates.GetReceivedPosition());
                     Debug.Log("euclideanDist: " + euclideanDist + " catching robber dist: " + catchingRobberDist);
                     // If a police car has "caught" the robber by proximity of catchingRobberDist
                     if (euclideanDist < catchingRobberDist) {
@@ -35,50 +35,36 @@ namespace TrafficSimulation {
 
             // If socket receives new coordinates of robber
             if (robberCoordinates.GetReceivedPosition() != robberLoc) {
-                Debug.Log("XXX COORDINATES RECEIVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 robberLoc = robberCoordinates.GetReceivedPosition();
 
                 // Find robber's current and target segment
-                policeTargets = getPoliceTargets.setPoliceTargets(robberLoc);
+                policeTargets = getPoliceTargets.SetPoliceTargets(robberLoc);
 
                 // Copy police and target candidates
                 List<Segment> remainingPoliceTargets = new List<Segment>(policeTargets);
 
-                // Find closest police car to each point
-                foreach (GameObject police in policeVehicles) {
-                    // Check if police car is not already at its target segment or location
-                    if (!policeDestinations.ContainsKey(police) || Vector3.Distance(police.transform.position, policeDestinations[police]) > 1f) {
-                        Vector3 policeLoc = police.transform.position;
+                // Ensure there are enough targets to assign
+                if (remainingPoliceTargets.Count > 0) {
+                    // Assign targets to all police cars, cycling through available segments if necessary
+                    for (int i = 0; i < policeVehicles.Count; i++) {
+                        GameObject police = policeVehicles[i];
+                        int targetIndex = i % remainingPoliceTargets.Count;
 
-                        TrafficSimulation.Segment closestTarget = null;
-                        float closestTargetDist = float.MaxValue;
-
-                        // Calculate closest segment to target via euclidean distance
-                        foreach (Segment policeTarget in remainingPoliceTargets) {
-                            // Location of policeTarget's last waypoint's position on screen
+                        // Check if police car is not already at its target segment or location
+                        if (!policeDestinations.ContainsKey(police) || Vector3.Distance(police.transform.position, policeDestinations[police]) > 1f) {
+                            Segment policeTarget = remainingPoliceTargets[targetIndex];
                             Vector3 targetLoc = policeTarget.waypoints[policeTarget.waypoints.Count - 1].transform.position;
-                            float euclideanDist = Math.Abs(targetLoc.x - policeLoc.x) + Math.Abs(targetLoc.z - policeLoc.z);
 
-                            if (euclideanDist < closestTargetDist) {
-                                closestTargetDist = euclideanDist;
-                                closestTarget = policeTarget;
-                            }
+                            // Set police car's destination to selected point and set status to go
+                            police.GetComponent<VehicleAI>().setPoliceTarget(policeTarget);
+                            police.GetComponent<VehicleAI>().setPoliceStatus();
+                            Debug.Log("Assigning target to police: " + policeTarget);
+
+                            policeDestinations[police] = targetLoc;
                         }
-
-                        // If no more targets remain, don't send an officer
-                        if (remainingPoliceTargets.Count == 0) {
-                            Debug.Log("No targets remaining");
-                            break;
-                        }
-
-                        // Set police car's destination to selected point and set status to go
-                        police.GetComponent<VehicleAI>().setPoliceTarget(closestTarget);
-                        police.GetComponent<VehicleAI>().setPoliceStatus();
-                        Debug.Log("Closest target: " + closestTarget);
-
-                        policeDestinations[police] = closestTarget.waypoints[closestTarget.waypoints.Count - 1].transform.position;
-                        remainingPoliceTargets.Remove(closestTarget);
                     }
+                } else {
+                    Debug.Log("No targets available for assignment");
                 }
             }
         }
