@@ -32,6 +32,7 @@ namespace TrafficSimulation {
                     if (euclideanDist < catchingRobberDist) {
                         robberCaughtImage.SetActive(true);
                         Debug.Log("ROBBER CAUGHT");
+                        // stop all movement
                         // Time.timeScale = 0;
                     }
                 }
