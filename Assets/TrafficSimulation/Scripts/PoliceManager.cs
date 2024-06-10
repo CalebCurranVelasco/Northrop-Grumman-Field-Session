@@ -13,6 +13,8 @@ namespace TrafficSimulation {
         public GameObject trafficSys;
         private Coordinate_Receiver robberCoordinates;
         public int catchingRobberDist = 8;
+        public GameObject robberCaughtImage = null;
+
         private Dictionary<GameObject, Vector3> policeDestinations = new Dictionary<GameObject, Vector3>();
 
         void Start() {
@@ -28,6 +30,7 @@ namespace TrafficSimulation {
                     Debug.Log("euclideanDist: " + euclideanDist + " catching robber dist: " + catchingRobberDist);
                     // If a police car has "caught" the robber by proximity of catchingRobberDist
                     if (euclideanDist < catchingRobberDist) {
+                        robberCaughtImage.SetActive(true);
                         Debug.Log("ROBBER CAUGHT");
                     }
                 }
