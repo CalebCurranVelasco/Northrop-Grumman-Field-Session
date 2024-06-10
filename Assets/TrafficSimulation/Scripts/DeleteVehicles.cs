@@ -15,6 +15,7 @@ namespace TrafficSimulation {
                 if(this.GetComponent<VehicleAI>().isRobberCar){
                     robberEscapedImage.SetActive(true);
                     Debug.Log("ROBBER ESCAPED");
+                    // Time.timeScale = 0;
                 }
                 Destroy(this.gameObject);
             }
