@@ -138,15 +138,19 @@ namespace TrafficSimulation {
             if (wpDist.magnitude < waypointThresh) {
                 currentTarget.waypoint++;
                 if (currentTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count) {
+                    // If the police car has reached its target segment, set status to STOP
+                    if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id) {
+                        Debug.Log("! In the double if");
+                        currentTarget.waypoint--;
+                        vehicleStatus = Status.STOP;
+                        return;
+                    }
+
                     pastTargetSegment = currentTarget.segment;
                     currentTarget.segment = futureTarget.segment;
                     currentTarget.waypoint = 0;
 
-                    // If the police car has reached its target segment, set status to STOP
-                    if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id) {
-                        vehicleStatus = Status.STOP;
-                        return;
-                    }
+                    
                 }
 
                 futureTarget.waypoint = currentTarget.waypoint + 1;
@@ -155,10 +159,10 @@ namespace TrafficSimulation {
                     futureTarget.segment = GetNextSegmentId();
                 }
             }
-            else if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id && vehicleStatus == Status.GO) {
-                // If the police car has already reached its target, set status to STOP
-                vehicleStatus = Status.STOP;
-            }
+            // else if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id && vehicleStatus == Status.GO) {
+            //     // If the police car has already reached its target, set status to STOP
+            //     vehicleStatus = Status.STOP;
+            // }
         }
 
         void MoveVehicle() {

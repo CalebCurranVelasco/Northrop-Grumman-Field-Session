@@ -47,5 +47,18 @@ namespace TrafficSimulation {
 
             return policeTargets;
         }
+
+            // For testing purposes, set the first segment as the police target
+        //     Segment policeTargetSegment = segments[19]; // Assuming segments list is not empty and has at least one segment
+
+        //     // You can also set a specific segment by its index, e.g., segments[1] for the second segment
+        //     // Segment policeTargetSegment = segments[1];
+
+        //     // Add the target segment to the list of police targets
+        //     List<Segment> policeTargets = new List<Segment> { policeTargetSegment };
+
+        //     return policeTargets;
+        // }
+
     }
 }
