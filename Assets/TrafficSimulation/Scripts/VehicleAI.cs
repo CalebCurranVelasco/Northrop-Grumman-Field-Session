@@ -140,7 +140,7 @@ namespace TrafficSimulation {
                 if (currentTarget.waypoint >= trafficSystem.segments[currentTarget.segment].waypoints.Count) {
                     // If the police car has reached its target segment, set status to STOP
                     if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id) {
-                        Debug.Log("! In the double if");
+                        // Debug.Log("! In the double if");
                         currentTarget.waypoint--;
                         vehicleStatus = Status.STOP;
                         return;

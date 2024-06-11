@@ -53,25 +53,25 @@ public class Coordinate_Receiver : MonoBehaviour
                     break;
                 }
 
-                Debug.Log("Waiting for data...");
+                // Debug.Log("Waiting for data...");
                 UdpReceiveResult result = await udpClient.ReceiveAsync();
-                Debug.Log("Data received");
+                // Debug.Log("Data received");
 
                 string text = Encoding.UTF8.GetString(result.Buffer);
-                Debug.Log($"Received text: {text}");
+                // Debug.Log($"Received text: {text}");
 
                 string[] parts = text.Split(new char[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
 
                 if (parts.Length == 4)
                 {
-                    Debug.Log("Parsing data");
+                    // Debug.Log("Parsing data");
                     int u = int.Parse(parts[0]);
                     int v = int.Parse(parts[1]);
                     int port = int.Parse(parts[3]);  // Port number is the fourth part
 
                     coordQueue.Enqueue((new Vector2(u, v), port));
 
-                    Debug.Log($"Received coordinates: ({u}, {v}) from port: {port}");
+                    // Debug.Log($"Received coordinates: ({u}, {v}) from port: {port}");
                 }
                 else
                 {
@@ -103,7 +103,7 @@ public class Coordinate_Receiver : MonoBehaviour
         // }
 
         Ray ray = camera.ScreenPointToRay(screenPoint);
-        Debug.Log($"Screen point: {screenPoint}, Ray origin: {ray.origin}, Ray direction: {ray.direction}");
+        // Debug.Log($"Screen point: {screenPoint}, Ray origin: {ray.origin}, Ray direction: {ray.direction}");
 
         if (camera == cameraBirdsEye)
         {
@@ -116,10 +116,10 @@ public class Coordinate_Receiver : MonoBehaviour
         if (groundPlane.Raycast(ray, out float enter))
         {
             Vector3 worldPoint = ray.GetPoint(enter);
-            Debug.Log($"World point: {worldPoint}, Raycast distance: {enter}");
+            // Debug.Log($"World point: {worldPoint}, Raycast distance: {enter}");
             return worldPoint;
         }
-        Debug.Log("Ray did not intersect with the ground plane.");
+        // Debug.Log("Ray did not intersect with the ground plane.");
         return Vector3.zero;
     }
 

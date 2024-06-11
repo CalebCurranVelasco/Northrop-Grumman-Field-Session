@@ -18,8 +18,10 @@ namespace TrafficSimulation {
                     
                     Debug.Log("ROBBER ESCAPED");
                     Debug.Log("Closest police to robber was: " + getClosestPolice() + " units away.");
+                    Time.timeScale = 0;
                 }
                 Destroy(this.gameObject);
+                
             }
         }
 

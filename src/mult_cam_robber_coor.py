@@ -54,16 +54,16 @@ class CameraHandler:
             return
 
         if len(data) < 4:
-            print(f"Received incomplete chunk from {addr}")
+            # print(f"Received incomplete chunk from {addr}")
             return
 
         chunk_index = int.from_bytes(data[:4], byteorder='little')
         if chunk_index >= self.expected_chunks[addr]:
-            print(f"Received out-of-bounds chunk {chunk_index + 1}/{self.expected_chunks[addr]} from {addr}")
+            # print(f"Received out-of-bounds chunk {chunk_index + 1}/{self.expected_chunks[addr]} from {addr}")
             return
 
         self.buffers[addr][chunk_index] = data[4:]
-        print(f"Received chunk {chunk_index + 1}/{self.expected_chunks[addr]} from {addr}")
+        # print(f"Received chunk {chunk_index + 1}/{self.expected_chunks[addr]} from {addr}")
 
         if all(self.buffers[addr]):
             full_data = b''.join(self.buffers[addr])
@@ -77,7 +77,7 @@ class CameraHandler:
                 img_np = cv2.resize(img_np, self.window_size)  # Ensure the image is resized to the expected resolution
                 self.camera_views[addr] = img_np
 
-                results = model(img_np, conf=0.5)
+                results = model(img_np, conf=0.25)
                 rects = []
                 class_ids = []
                 for result in results[0].boxes.data:
@@ -91,6 +91,9 @@ class CameraHandler:
                     cv2.putText(img_np, text, (centroid[0] - 10, centroid[1] - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                     cv2.circle(img_np, (centroid[0], centroid[1]), 4, (0, 255, 0), -1)
+
+                    for (startX, startY, endX, endY) in rects:
+                        cv2.rectangle(img_np, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
                 # Check if any of the detected objects are "Robber Car"
                 for i, class_id in enumerate(class_ids):

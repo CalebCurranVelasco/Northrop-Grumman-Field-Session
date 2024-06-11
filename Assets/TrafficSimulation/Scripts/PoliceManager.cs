@@ -27,13 +27,13 @@ namespace TrafficSimulation {
             if (robberLoc != Vector3.zero) {
                 foreach (GameObject police in policeVehicles) {
                     float euclideanDist = Vector3.Distance(police.transform.position, robberCoordinates.GetReceivedPosition());
-                    Debug.Log("euclideanDist: " + euclideanDist + " catching robber dist: " + catchingRobberDist);
+                    // Debug.Log("euclideanDist: " + euclideanDist + " catching robber dist: " + catchingRobberDist);
                     // If a police car has "caught" the robber by proximity of catchingRobberDist
                     if (euclideanDist < catchingRobberDist) {
                         robberCaughtImage.SetActive(true);
                         Debug.Log("ROBBER CAUGHT");
                         // stop all movement
-                        // Time.timeScale = 0;
+                        Time.timeScale = 0;
                     }
                 }
             }
@@ -63,13 +63,11 @@ namespace TrafficSimulation {
                             // Set police car's destination to selected point and set status to go
                             police.GetComponent<VehicleAI>().setPoliceTarget(policeTarget);
                             police.GetComponent<VehicleAI>().setPoliceStatus();
-                            Debug.Log("Assigning target to police: " + policeTarget);
+                            // Debug.Log("Assigning target to police: " + policeTarget);
 
                             policeDestinations[police] = targetLoc;
                         }
                     }
-                } else {
-                    Debug.Log("No targets available for assignment");
                 }
             }
         }
