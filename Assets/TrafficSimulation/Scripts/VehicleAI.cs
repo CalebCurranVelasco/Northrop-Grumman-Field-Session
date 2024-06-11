@@ -159,6 +159,10 @@ namespace TrafficSimulation {
                     futureTarget.segment = GetNextSegmentId();
                 }
             }
+            // Check if the police car's target segment has changed and if so, set status to GO
+            if (isPolice && policeTarget != null && vehicleStatus == Status.STOP && currentTarget.segment != policeTarget.id) {
+                vehicleStatus = Status.GO;
+            }
             // else if (isPolice && policeTarget != null && currentTarget.segment == policeTarget.id && vehicleStatus == Status.GO) {
             //     // If the police car has already reached its target, set status to STOP
             //     vehicleStatus = Status.STOP;
