@@ -183,6 +183,7 @@ MonoBehaviour:
   emergencyBrakeThresh: 1.5
   slowDownThresh: 5
   isRobberCar: 0
+  escapeLocations: []
   escapeLocation: {fileID: 0}
   policeTarget: {fileID: 0}
   isPolice: 0
@@ -220,6 +221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 204287432c0db45fcb4e1549ef8d0776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  policeVehicles: []
+  robberEscapedImage: {fileID: 0}
 --- !u!1 &3358997260595584712
 GameObject:
   m_ObjectHideFlags: 0

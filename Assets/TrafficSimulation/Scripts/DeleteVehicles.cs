@@ -28,12 +28,17 @@ namespace TrafficSimulation {
 
             // Find the police closest to the robber's location
             foreach (GameObject police in policeVehicles) {
+                if(police == null){
+                    continue;
+                }
+
                 float euclideanDist = Vector3.Distance(police.transform.position, this.transform.position);
 
                 if (euclideanDist < closestPoliceDist) {
                     closestPoliceDist = euclideanDist;
                 }
             }
+            
             return closestPoliceDist;
         }
     }

@@ -12,7 +12,7 @@ namespace TrafficSimulation {
         public List<Segment> policeTargets;
         public GameObject trafficSys;
         private Coordinate_Receiver robberCoordinates;
-        public int catchingRobberDist = 8;
+        public int catchingRobberDist = 9;
         public GameObject robberCaughtImage = null;
 
         private Dictionary<GameObject, Vector3> policeDestinations = new Dictionary<GameObject, Vector3>();
