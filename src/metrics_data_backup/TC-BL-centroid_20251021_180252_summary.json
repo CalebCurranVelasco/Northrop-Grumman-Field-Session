@@ -1,0 +1,18 @@
+{
+  "scenario_name": "TC-BL-centroid",
+  "duration_seconds": 51.72172951698303,
+  "total_frames": 124,
+  "avg_fps": 2.3974449647760543,
+  "total_id_switches": 0,
+  "id_switches_per_min": 0.0,
+  "avg_track_length": 98.93333333333334,
+  "avg_active_tracks": 23.93548387096774,
+  "total_predictions": 440,
+  "avg_prediction_error": null,
+  "total_intercept_attempts": 0,
+  "successful_intercepts": 0,
+  "interception_success_rate": null,
+  "avg_intercept_time": null,
+  "avg_frame_time": 205.95085236334032,
+  "p95_frame_time": 192.3778414726257
+}

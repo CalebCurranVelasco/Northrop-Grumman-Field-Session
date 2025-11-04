@@ -1,6 +1,7 @@
 from scipy.spatial import distance as dist
 from collections import OrderedDict
 import numpy as np
+import time
 
 class CentroidTracker:
     def __init__(self, maxDisappeared=10): # was originally 50
@@ -12,6 +13,12 @@ class CentroidTracker:
         self.objects = OrderedDict()
         self.disappeared = OrderedDict()
 
+        # NEW: Track velocities, position history, and timestamps
+        self.velocities = OrderedDict()
+        self.history = OrderedDict()
+        self.timestamps = OrderedDict()
+        self.history_length = 5  # Keep last 5 positions
+
         # store the number of maximum consecutive frames a given
         # object is allowed to be marked as "disappeared" until we
         # need to deregister the object from tracking
@@ -22,6 +29,12 @@ class CentroidTracker:
         # ID to store the centroid
         self.objects[self.nextObjectID] = centroid
         self.disappeared[self.nextObjectID] = 0
+
+        # NEW: Initialize velocity and history
+        self.velocities[self.nextObjectID] = np.array([0, 0])
+        self.history[self.nextObjectID] = [centroid]
+        self.timestamps[self.nextObjectID] = time.time()
+
         self.nextObjectID += 1
 
     def deregister(self, objectID):
@@ -29,6 +42,14 @@ class CentroidTracker:
         # both of our respective dictionaries
         del self.objects[objectID]
         del self.disappeared[objectID]
+
+        # NEW: Clean up velocity and history
+        if objectID in self.velocities:
+            del self.velocities[objectID]
+        if objectID in self.history:
+            del self.history[objectID]
+        if objectID in self.timestamps:
+            del self.timestamps[objectID]
 
     def update(self, rects):
         # check to see if the list of input bounding box rectangles
@@ -110,8 +131,33 @@ class CentroidTracker:
                 # set its new centroid, and reset the disappeared
                 # counter
                 objectID = objectIDs[row]
-                self.objects[objectID] = inputCentroids[col]
+                old_centroid = self.objects[objectID]
+                new_centroid = inputCentroids[col]
+
+                self.objects[objectID] = new_centroid
                 self.disappeared[objectID] = 0
+
+                # NEW: Calculate velocity and update history
+                current_time = time.time()
+                dt = current_time - self.timestamps.get(objectID, current_time)
+
+                if dt > 0:
+                    # Calculate velocity (pixels per second)
+                    velocity = (new_centroid - old_centroid) / dt
+                    self.velocities[objectID] = velocity
+                else:
+                    # First frame or same timestamp
+                    self.velocities[objectID] = np.array([0, 0])
+
+                # Update timestamp
+                self.timestamps[objectID] = current_time
+
+                # Update position history
+                if objectID not in self.history:
+                    self.history[objectID] = []
+                self.history[objectID].append(new_centroid)
+                if len(self.history[objectID]) > self.history_length:
+                    self.history[objectID].pop(0)
 
                 # indicate that we have examined each of the row and
                 # column indexes, respectively
@@ -150,3 +196,41 @@ class CentroidTracker:
 
         # return the set of trackable objects
         return self.objects
+
+    def get_velocity(self, objectID):
+        """Get velocity vector for an object (pixels per second)"""
+        if objectID in self.velocities:
+            return self.velocities[objectID]
+        return np.array([0, 0])
+
+    def get_speed(self, objectID):
+        """Get speed (magnitude of velocity) for an object"""
+        velocity = self.get_velocity(objectID)
+        return np.linalg.norm(velocity)
+
+    def predict_position(self, objectID, time_ahead):
+        """
+        Predict future position based on current velocity
+
+        Args:
+            objectID: ID of the object to predict
+            time_ahead: Time in seconds to predict ahead
+
+        Returns:
+            Predicted position as [x, y] or None if object doesn't exist
+        """
+        if objectID not in self.objects:
+            return None
+
+        current_pos = self.objects[objectID]
+        velocity = self.get_velocity(objectID)
+
+        # Simple linear prediction: future_pos = current_pos + velocity * time
+        predicted_pos = current_pos + (velocity * time_ahead)
+        return predicted_pos
+
+    def get_history(self, objectID):
+        """Get position history for an object"""
+        if objectID in self.history:
+            return self.history[objectID]
+        return []

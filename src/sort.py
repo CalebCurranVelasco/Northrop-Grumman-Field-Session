@@ -151,23 +151,51 @@ class KalmanBoxTracker(object):
     return convert_x_to_bbox(self.kf.x)
 
 
-def associate_detections_to_trackers(detections,trackers,iou_threshold = 0.3):
+def centroid_distance_batch(bb_test, bb_gt):
   """
-  Assigns detections to tracked object (both represented as bounding boxes)
+  Computes centroid distance between bboxes in form [x1,y1,x2,y2]
+  Returns distance matrix (lower is better match)
+  """
+  # Calculate centroids for detections
+  bb_test_centroids = np.stack([
+    (bb_test[:, 0] + bb_test[:, 2]) / 2.0,
+    (bb_test[:, 1] + bb_test[:, 3]) / 2.0
+  ], axis=1)
+
+  # Calculate centroids for trackers
+  bb_gt_centroids = np.stack([
+    (bb_gt[:, 0] + bb_gt[:, 2]) / 2.0,
+    (bb_gt[:, 1] + bb_gt[:, 3]) / 2.0
+  ], axis=1)
+
+  # Compute pairwise distances: [detections x trackers]
+  # Using broadcasting to compute all pairs efficiently
+  bb_test_exp = np.expand_dims(bb_test_centroids, 1)  # [N, 1, 2]
+  bb_gt_exp = np.expand_dims(bb_gt_centroids, 0)      # [1, M, 2]
+
+  distances = np.sqrt(np.sum((bb_test_exp - bb_gt_exp) ** 2, axis=2))
+
+  return distances
+
+
+def associate_detections_to_trackers(detections, trackers, iou_threshold=0.3):
+  """
+  Assigns detections to tracked object using CENTROID DISTANCE matching
+  (Modified from original IoU-based SORT for better handling of fast-moving objects)
 
   Returns 3 lists of matches, unmatched_detections and unmatched_trackers
   """
   if(len(trackers)==0):
     return np.empty((0,2),dtype=int), np.arange(len(detections)), np.empty((0,5),dtype=int)
 
-  iou_matrix = iou_batch(detections, trackers)
+  # Pure centroid distance matching - best for fast-moving vehicles
+  distance_threshold = 100.0  # pixels (best performance at 100px)
 
-  if min(iou_matrix.shape) > 0:
-    a = (iou_matrix > iou_threshold).astype(np.int32)
-    if a.sum(1).max() == 1 and a.sum(0).max() == 1:
-        matched_indices = np.stack(np.where(a), axis=1)
-    else:
-      matched_indices = linear_assignment(-iou_matrix)
+  distance_matrix = centroid_distance_batch(detections, trackers)
+
+  if min(distance_matrix.shape) > 0:
+    # Use Hungarian algorithm with distance as cost
+    matched_indices = linear_assignment(distance_matrix)
   else:
     matched_indices = np.empty(shape=(0,2))
 
@@ -180,14 +208,15 @@ def associate_detections_to_trackers(detections,trackers,iou_threshold = 0.3):
     if(t not in matched_indices[:,1]):
       unmatched_trackers.append(t)
 
-  #filter out matched with low IOU
+  # Filter out matches with distance too large
   matches = []
   for m in matched_indices:
-    if(iou_matrix[m[0], m[1]]<iou_threshold):
+    if distance_matrix[m[0], m[1]] > distance_threshold:
       unmatched_detections.append(m[0])
       unmatched_trackers.append(m[1])
     else:
       matches.append(m.reshape(1,2))
+
   if(len(matches)==0):
     matches = np.empty((0,2),dtype=int)
   else:

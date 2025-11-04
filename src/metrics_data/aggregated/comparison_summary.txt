@@ -1,0 +1,104 @@
+======================================================================
+METRICS COMPARISON SUMMARY
+======================================================================
+
+PER-SCENARIO AVERAGES:
+----------------------------------------------------------------------
+
+
+BL-TC:
+  SORT:
+    ID Switches/min: 0.00
+    Track Length:    11.1 frames
+    FPS:             1.3
+    Caught:          3/3 (100%)
+  CENTROID:
+    ID Switches/min: 0.00
+    Track Length:    32.5 frames
+    FPS:             1.4
+    Caught:          3/3 (100%)
+
+BL-TL:
+  SORT:
+    ID Switches/min: 0.00
+    Track Length:    11.8 frames
+    FPS:             1.3
+    Caught:          2/3 (67%)
+  CENTROID:
+    ID Switches/min: 0.00
+    Track Length:    39.4 frames
+    FPS:             1.6
+    Caught:          3/3 (100%)
+
+BL-TR:
+  SORT:
+    ID Switches/min: 0.00
+    Track Length:    10.6 frames
+    FPS:             1.6
+    Caught:          3/3 (100%)
+  CENTROID:
+    ID Switches/min: 0.00
+    Track Length:    30.7 frames
+    FPS:             1.6
+    Caught:          3/3 (100%)
+
+TC-BL:
+  SORT:
+    ID Switches/min: 0.00
+    Track Length:    19.4 frames
+    FPS:             2.3
+    Caught:          2/3 (67%)
+  CENTROID:
+    ID Switches/min: 0.00
+    Track Length:    90.6 frames
+    FPS:             2.6
+    Caught:          3/3 (100%)
+
+TL-BL:
+  SORT:
+    ID Switches/min: 0.00
+    Track Length:    15.3 frames
+    FPS:             1.7
+    Caught:          2/3 (67%)
+  CENTROID:
+    ID Switches/min: 0.00
+    Track Length:    42.7 frames
+    FPS:             1.8
+    Caught:          3/3 (100%)
+
+TR-BL:
+  SORT:
+    ID Switches/min: 0.00
+    Track Length:    31.1 frames
+    FPS:             2.9
+    Caught:          3/4 (100%)
+  CENTROID:
+    ID Switches/min: 0.00
+    Track Length:    113.7 frames
+    FPS:             2.8
+    Caught:          2/3 (67%)
+
+
+======================================================================
+OVERALL TRACKER PERFORMANCE:
+======================================================================
+
+SORT (across 6 scenarios):
+  Average ID Switches/min: 0.00
+  Average Track Length:    16.5 frames
+  Average FPS:             1.9
+  Scenarios tested:        BL-TC, BL-TL, BL-TR, TC-BL, TL-BL, TR-BL
+
+CENTROID (across 6 scenarios):
+  Average ID Switches/min: 0.00
+  Average Track Length:    58.3 frames
+  Average FPS:             2.0
+  Scenarios tested:        BL-TC, BL-TL, BL-TR, TC-BL, TL-BL, TR-BL
+
+
+======================================================================
+SORT vs CENTROID IMPROVEMENT:
+======================================================================
+
+  ID Switches:  +nan% (SORT reduced by nan%)
+  Track Length: -71.6% (SORT increased by -71.6%)

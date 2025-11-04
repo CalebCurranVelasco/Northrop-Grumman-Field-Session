@@ -1,0 +1,20 @@
+{
+  "scenario_name": "TL-BL-sort-trial3",
+  "duration_seconds": 29.963043212890625,
+  "total_frames": 69,
+  "avg_fps": 2.302836848371763,
+  "chase_outcome": "escaped",
+  "chase_end_time": 28.63309621810913,
+  "total_id_switches": 0,
+  "id_switches_per_min": 0.0,
+  "avg_track_length": 20.618181818181817,
+  "avg_active_tracks": 16.434782608695652,
+  "total_predictions": 150,
+  "avg_prediction_error": null,
+  "total_intercept_attempts": 0,
+  "successful_intercepts": 0,
+  "interception_success_rate": null,
+  "avg_intercept_time": null,
+  "avg_frame_time": 250.1739177151003,
+  "p95_frame_time": 213.77806663513184
+}

@@ -1,0 +1,5 @@
+frame,police_id,can_intercept,time_to_intercept,distance
+32,1,1,-1,0.0
+32,12,1,-1,0.0
+33,15,1,-1,0.0
+33,16,1,-1,0.0

@@ -1,0 +1,20 @@
+============================================================
+METRICS SUMMARY: BL-TC-sort-trial3
+============================================================
+
+Session Duration: 25.8 seconds
+Total Frames: 37
+Average FPS: 1.4
+
+TRACKING QUALITY:
+  ID Switches: 0 (0.0/min)
+  Average Track Length: 10.9 frames
+  Average Active Tracks: 15.9
+
+CHASE OUTCOME:
+  Result: CAUGHT
+  Time: 23.1s
+
+SYSTEM PERFORMANCE:
+  Average Frame Time: 307.8ms
+  P95 Frame Time: 231.7ms

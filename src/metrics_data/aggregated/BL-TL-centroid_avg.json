@@ -1,0 +1,16 @@
+{
+  "scenario_base": "BL-TL",
+  "tracker": "centroid",
+  "num_trials": 3,
+  "duration_seconds": 27.041213512420654,
+  "total_frames": 42.666666666666664,
+  "avg_fps": 1.5840302038438436,
+  "id_switches_per_min": 0.0,
+  "avg_track_length": 39.367753623188406,
+  "avg_active_tracks": 21.842899152395777,
+  "avg_frame_time": 284.21144111926446,
+  "p95_frame_time": 245.29006481170646,
+  "caught_count": 3,
+  "escaped_count": 0,
+  "catch_rate": 1.0
+}

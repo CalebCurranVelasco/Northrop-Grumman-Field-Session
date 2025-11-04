@@ -1,0 +1,20 @@
+============================================================
+METRICS SUMMARY: BL-TL-centroid-trial2
+============================================================
+
+Session Duration: 27.3 seconds
+Total Frames: 47
+Average FPS: 1.7
+
+TRACKING QUALITY:
+  ID Switches: 0 (0.0/min)
+  Average Track Length: 44.6 frames
+  Average Active Tracks: 22.8
+
+CHASE OUTCOME:
+  Result: CAUGHT
+  Time: 25.5s
+
+SYSTEM PERFORMANCE:
+  Average Frame Time: 277.5ms
+  P95 Frame Time: 226.2ms

@@ -1,0 +1,20 @@
+{
+  "scenario_name": "BL-TC-centroid-trial1",
+  "duration_seconds": 27.576368808746338,
+  "total_frames": 37,
+  "avg_fps": 1.3417285015518357,
+  "chase_outcome": "caught",
+  "chase_end_time": 25.369633197784424,
+  "total_id_switches": 0,
+  "id_switches_per_min": 0.0,
+  "avg_track_length": 27.708333333333332,
+  "avg_active_tracks": 17.972972972972972,
+  "total_predictions": 220,
+  "avg_prediction_error": null,
+  "total_intercept_attempts": 0,
+  "successful_intercepts": 0,
+  "interception_success_rate": null,
+  "avg_intercept_time": null,
+  "avg_frame_time": 301.650975201581,
+  "p95_frame_time": 249.937582015991
+}

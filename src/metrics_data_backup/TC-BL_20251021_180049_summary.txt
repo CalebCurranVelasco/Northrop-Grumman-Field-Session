@@ -1,0 +1,16 @@
+============================================================
+METRICS SUMMARY: TC-BL
+============================================================
+
+Session Duration: 51.7 seconds
+Total Frames: 131
+Average FPS: 2.5
+
+TRACKING QUALITY:
+  ID Switches: 0 (0.0/min)
+  Average Track Length: 29.0 frames
+  Average Active Tracks: 15.3
+
+SYSTEM PERFORMANCE:
+  Average Frame Time: 204.2ms
+  P95 Frame Time: 191.2ms

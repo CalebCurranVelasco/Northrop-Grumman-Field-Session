@@ -1,0 +1,20 @@
+============================================================
+METRICS SUMMARY: TL-BL-sort-trial2
+============================================================
+
+Session Duration: 17.5 seconds
+Total Frames: 9
+Average FPS: 0.5
+
+TRACKING QUALITY:
+  ID Switches: 0 (0.0/min)
+  Average Track Length: 3.2 frames
+  Average Active Tracks: 13.0
+
+CHASE OUTCOME:
+  Result: CAUGHT
+  Time: 16.6s
+
+SYSTEM PERFORMANCE:
+  Average Frame Time: 629.4ms
+  P95 Frame Time: 2534.3ms

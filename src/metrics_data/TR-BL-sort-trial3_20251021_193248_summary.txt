@@ -1,0 +1,16 @@
+============================================================
+METRICS SUMMARY: TR-BL-sort-trial3
+============================================================
+
+Session Duration: 60.1 seconds
+Total Frames: 180
+Average FPS: 3.0
+
+TRACKING QUALITY:
+  ID Switches: 0 (0.0/min)
+  Average Track Length: 30.2 frames
+  Average Active Tracks: 14.4
+
+SYSTEM PERFORMANCE:
+  Average Frame Time: 206.6ms
+  P95 Frame Time: 215.8ms
